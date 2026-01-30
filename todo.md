@@ -121,3 +121,11 @@
 - [x] Update Chat page to load conversation based on current theme
 - [x] Theme persists in localStorage
 - [ ] Test theme switching flow end-to-end (needs testing)
+
+## Conversation Summarization (COMPLETED)
+
+- [x] Detect 10-message threshold in Chat.tsx
+- [x] Call assistant.summarize after threshold
+- [x] Save summary to database via chat.updateSummary
+- [x] Update context building to use summary + recent messages
+- [ ] Test summarization flow (needs OpenAI credentials)

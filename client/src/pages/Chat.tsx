@@ -76,6 +76,8 @@ export default function Chat() {
   // Mutations
   const sendToAssistant = trpc.assistant.send.useMutation();
   const saveMessage = trpc.chat.saveMessage.useMutation();
+  const summarize = trpc.assistant.summarize.useMutation();
+  const updateSummary = trpc.chat.updateSummary.useMutation();
 
   const handleSendMessage = async () => {
     if (!inputText.trim() || !user) return;
@@ -100,9 +102,15 @@ export default function Chat() {
         content: messageText,
       });
 
-      // Build context from recent messages
+      // Build context from summary + recent messages
+      let context = "";
+      
+      if (conversation?.summary) {
+        context = `[EERDERE SAMENVATTING]\n${conversation.summary}\n\n[RECENTE BERICHTEN]\n`;
+      }
+      
       const recentMessages = messages.slice(-8);
-      const context = recentMessages
+      context += recentMessages
         .map((m) => `${m.isAI ? "Matti" : "Gebruiker"}: ${m.content}`)
         .join("\n");
 
@@ -139,7 +147,39 @@ export default function Chat() {
       setMessages((prev) => [...prev, aiMsg]);
 
       // Refresh conversation to get updated threadId
-      refetchConversation();
+      await refetchConversation();
+
+      // Check if we need to summarize (every 10 messages)
+      const totalMessages = messages.length + 2; // +2 for user + AI messages just added
+      if (totalMessages > 0 && totalMessages % 10 === 0) {
+        console.log('[Summarization] Threshold reached, generating summary...');
+        
+        // Build prompt for summarization
+        const allMessages = [...messages, userMsg, aiMsg];
+        const conversationText = allMessages
+          .map((m) => `${m.isAI ? "Matti" : "Gebruiker"}: ${m.content}`)
+          .join("\n");
+        
+        const summaryPrompt = `Vat het volgende gesprek samen in maximaal 3 zinnen. Focus op de belangrijkste punten en gevoelens:\n\n${conversationText}`;
+        
+        try {
+          const summaryResult = await summarize.mutateAsync({
+            threadId: response.threadId,
+            prompt: summaryPrompt,
+          });
+          
+          if (summaryResult.summary) {
+            await updateSummary.mutateAsync({
+              themeId: currentThemeId,
+              summary: summaryResult.summary,
+            });
+            console.log('[Summarization] Summary saved:', summaryResult.summary);
+          }
+        } catch (error) {
+          console.error('[Summarization] Failed:', error);
+          // Don't block user flow if summarization fails
+        }
+      }
     } catch (error) {
       console.error("Error sending message:", error);
       const errorMsg: ChatMessage = {
