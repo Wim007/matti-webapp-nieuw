@@ -75,7 +75,7 @@ export default function Account() {
 
   return (
     <div className="min-h-screen bg-background overflow-y-auto">
-      <div className="max-w-2xl mx-auto px-6 py-8">
+      <div className="max-w-2xl mx-auto px-6 py-8" style={{backgroundColor: '#aaf2f3'}}>
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">
@@ -97,7 +97,7 @@ export default function Account() {
             onChange={(e) => setName(e.target.value)}
             placeholder="Bijvoorbeeld: Lisa"
             maxLength={50}
-            className="w-full bg-surface border border-border rounded-2xl px-4 py-4 text-base text-foreground placeholder:text-muted-foreground"
+            className="w-full bg-surface border border-border rounded-2xl px-4 py-4 text-base text-foreground placeholder:text-muted-foreground" style={{backgroundColor: '#7cd5f3'}}
           />
         </div>
 
@@ -112,7 +112,7 @@ export default function Account() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="bijvoorbeeld@email.nl"
             maxLength={100}
-            className="w-full bg-surface border border-border rounded-2xl px-4 py-4 text-base text-foreground placeholder:text-muted-foreground"
+            className="w-full bg-surface border border-border rounded-2xl px-4 py-4 text-base text-foreground placeholder:text-muted-foreground" style={{backgroundColor: '#7ee3f1'}}
           />
           <p className="text-xs text-muted-foreground mt-1 px-1">
             Voor account herstel (optioneel)
@@ -130,7 +130,7 @@ export default function Account() {
             onChange={(e) => setAge(e.target.value)}
             placeholder="Bijvoorbeeld: 16"
             maxLength={2}
-            className="w-full bg-surface border border-border rounded-2xl px-4 py-4 text-base text-foreground placeholder:text-muted-foreground"
+            className="w-full bg-surface border border-border rounded-2xl px-4 py-4 text-base text-foreground placeholder:text-muted-foreground" style={{backgroundColor: '#79d9ec'}}
           />
           <p className="text-xs text-muted-foreground mt-1 px-1">
             Tussen {AGE_RANGE.MIN} en {AGE_RANGE.MAX} jaar
@@ -148,7 +148,7 @@ export default function Account() {
             onChange={(e) => setPostalCode(e.target.value.toUpperCase())}
             placeholder="Bijvoorbeeld: 1234AB"
             maxLength={7}
-            className="w-full bg-surface border border-border rounded-2xl px-4 py-4 text-base text-foreground placeholder:text-muted-foreground"
+            className="w-full bg-surface border border-border rounded-2xl px-4 py-4 text-base text-foreground placeholder:text-muted-foreground" style={{backgroundColor: '#76f7f9'}}
           />
           <p className="text-xs text-muted-foreground mt-1 px-1">
             Nederlandse postcode (4 cijfers + 2 letters)
@@ -169,7 +169,7 @@ export default function Account() {
                   selectedGender === option.value
                     ? "border-primary"
                     : "border-border"
-                } rounded-xl px-4 py-3 flex items-center gap-3 hover:opacity-90 transition-opacity`}
+                } rounded-xl px-4 py-3 flex items-center gap-3 hover:opacity-90 transition-opacity`} style={{backgroundColor: '#f3a5a5'}}
               >
                 <span className="text-2xl">{option.emoji}</span>
                 <span
@@ -200,7 +200,7 @@ export default function Account() {
               } flex items-center justify-center mt-0.5 flex-shrink-0`}
             >
               {analyticsConsent && (
-                <span className="text-white font-bold text-sm">✓</span>
+                <span className="text-white font-bold text-sm" style={{color: '#3c2525'}}>✓</span>
               )}
             </div>
             <div className="flex-1">
@@ -225,7 +225,7 @@ export default function Account() {
             disabled={!isFormValid}
             className={`w-full bg-primary text-white font-bold text-lg px-8 py-4 rounded-full ${
               !isFormValid ? "opacity-50 cursor-not-allowed" : "hover:opacity-90"
-            } transition-opacity`}
+            } transition-opacity`} style={{backgroundColor: '#78f368', color: '#2d1f1f'}}
           >
             Start chatten ✨
           </button>
