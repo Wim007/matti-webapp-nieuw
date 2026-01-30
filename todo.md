@@ -129,3 +129,13 @@
 - [x] Save summary to database via chat.updateSummary
 - [x] Update context building to use summary + recent messages
 - [ ] Test summarization flow (needs OpenAI credentials)
+
+## History Screen Implementation (COMPLETED)
+
+- [x] Create chat.getAllConversations tRPC procedure
+- [x] Build History.tsx with conversation list UI
+- [x] Implement date grouping (vandaag, deze week, deze maand, ouder)
+- [x] Show summary preview per conversatie
+- [x] Add click-to-resume functionality (switch theme + navigate to chat)
+- [x] Implement empty state when no history
+- [ ] Test history screen flow (needs data)

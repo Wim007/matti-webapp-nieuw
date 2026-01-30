@@ -2,7 +2,7 @@ import { z } from "zod";
 import { protectedProcedure, router } from "./_core/trpc";
 import { getDb } from "./db";
 import { conversations } from "../drizzle/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc, sql } from "drizzle-orm";
 import type { ThemeId } from "@shared/matti-types";
 
 /**
@@ -149,6 +149,44 @@ export const chatRouter = router({
         success: true,
         messageCount: updatedMessages.length,
       };
+    }),
+
+  /**
+   * Get all conversations for current user
+   */
+  getAllConversations: protectedProcedure
+    .query(async ({ ctx }) => {
+      const db = await getDb();
+      if (!db) {
+        throw new Error("Database not available");
+      }
+
+      const userId = ctx.user.id;
+
+      const convos = await db
+        .select({
+          id: conversations.id,
+          themeId: conversations.themeId,
+          summary: conversations.summary,
+          updatedAt: conversations.updatedAt,
+          createdAt: conversations.createdAt,
+        })
+        .from(conversations)
+        .where(eq(conversations.userId, userId))
+        .orderBy(desc(conversations.updatedAt));
+
+      // Count messages for each conversation
+      const withCounts = await Promise.all(
+        convos.map(async (convo) => {
+          const messageCount = (convo as any).messages?.length || 0;
+          return {
+            ...convo,
+            messageCount,
+          };
+        })
+      );
+
+      return withCounts;
     }),
 
   /**
