@@ -6,7 +6,7 @@ export default function Welcome() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
       <div className="max-w-2xl w-full">
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-8" style={{backgroundColor: '#3805f0'}}>
           {/* Header */}
           <div className="flex flex-col items-center gap-4">
             <div className="text-5xl">👋</div>

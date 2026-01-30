@@ -58,7 +58,7 @@ export default function Actions() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 pb-8">
+      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 pb-8" style={{backgroundColor: '#539ac6'}}>
         <h1 className="text-2xl font-bold mb-2">💪 Mijn Acties</h1>
         <p className="text-purple-100">Jouw concrete stappen naar vooruitgang</p>
       </div>
