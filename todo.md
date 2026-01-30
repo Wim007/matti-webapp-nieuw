@@ -139,3 +139,11 @@
 - [x] Add click-to-resume functionality (switch theme + navigate to chat)
 - [x] Implement empty state when no history
 - [ ] Test history screen flow (needs data)
+
+## Message Streaming Implementation (NOT NEEDED)
+
+**Besluit:** Originele Matti-app gebruikt GEEN streaming. Response komt in één keer terug via `createAndPoll()`. Typing indicator toont tijdens wachten.
+
+- [x] Checked original implementation
+- [x] Confirmed no streaming needed
+- [x] Typing indicator already works correctly
