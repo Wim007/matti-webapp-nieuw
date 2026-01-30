@@ -142,6 +142,21 @@ export const analytics = mysqlTable("analytics", {
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
+/**
+ * Follow-ups table - scheduled check-ins for actions
+ * Implements intelligent intervals (Day 2, 4, 7, 10, 14, 21)
+ */
+export const followUps = mysqlTable("followUps", {
+  id: int("id").autoincrement().primaryKey(),
+  actionId: int("actionId").notNull().references(() => actions.id),
+  scheduledFor: timestamp("scheduledFor").notNull(),
+  status: mysqlEnum("status", ["pending", "sent", "responded", "skipped"]).default("pending").notNull(),
+  notificationSent: timestamp("notificationSent"),
+  response: text("response"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+// Type exports
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 export type Theme = typeof themes.$inferSelect;
@@ -150,6 +165,8 @@ export type Conversation = typeof conversations.$inferSelect;
 export type InsertConversation = typeof conversations.$inferInsert;
 export type Action = typeof actions.$inferSelect;
 export type InsertAction = typeof actions.$inferInsert;
+export type FollowUp = typeof followUps.$inferSelect;
+export type InsertFollowUp = typeof followUps.$inferInsert;
 export type Session = typeof sessions.$inferSelect;
 export type InsertSession = typeof sessions.$inferInsert;
 export type Analytics = typeof analytics.$inferSelect;

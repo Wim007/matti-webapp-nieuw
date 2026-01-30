@@ -15,6 +15,7 @@ import History from "./pages/History";
 import Themes from "./pages/Themes";
 import Profile from "./pages/Profile";
 import ParentInfo from "./pages/ParentInfo";
+import Actions from "./pages/Actions";
 
 function Router() {
   return (
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/chat" component={Chat} />
       <Route path="/history" component={History} />
       <Route path="/themes" component={Themes} />
+      <Route path="/actions" component={Actions} />
       <Route path="/profile" component={Profile} />
       <Route path="/parent-info" component={ParentInfo} />
       

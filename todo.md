@@ -147,3 +147,38 @@
 - [x] Checked original implementation
 - [x] Confirmed no streaming needed
 - [x] Typing indicator already works correctly
+
+## Action Detection & Follow-up System (IN PROGRESS)
+
+### Database Schema
+- [x] Create actions table (already existed in schema)
+- [x] Create followUps table (id, actionId, scheduledFor, status, notificationSent)
+- [x] Generate and apply migrations
+
+### Action Detection Logic
+- [x] Implement tag-based detection ([ACTION: text] format)
+- [x] Extract action text from AI response
+- [x] Clean response (remove [ACTION] tag)
+- [x] Integrate with Chat.tsx (detect + save after AI response)
+
+### Action Management
+- [x] Create actionRouter with tRPC procedures
+- [x] saveAction mutation (create action + schedule follow-ups)
+- [x] getActions query (fetch user's actions by status)
+- [x] updateActionStatus mutation (mark as completed/cancelled)
+- [x] getActionStats query (completion rate, etc.)
+
+### Follow-up Scheduling
+- [x] Implement intelligent intervals (Day 2, 4, 7, 10, 14, 21)
+- [x] Create followUp records in database
+- [x] Schedule notifications via Manus Notification API (followUpNotificationHandler.ts)
+- [x] Handle notification delivery and tracking (marks as sent)
+### UI Components
+- [x] Action toast notification in chat (when action detected)
+- [x] Actions list screen (pending/completed/cancelled)
+- [x] Action completion flow (mark as done)
+- [ ] Reward animation (confetti on completion - not yet)
+- [x] Tab navigation update (replaced Ouders with Acties)sages
+- [ ] Test follow-up scheduling
+- [ ] Test notification delivery
+- [ ] Test action completion flow

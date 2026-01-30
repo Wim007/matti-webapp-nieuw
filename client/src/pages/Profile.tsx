@@ -128,7 +128,7 @@ function TabNavigation({ currentTab }: { currentTab: string }) {
     { id: "history", label: "Geschiedenis", icon: "📜", path: "/history" },
     { id: "themes", label: "Thema's", icon: "🎨", path: "/themes" },
     { id: "profile", label: "Profiel", icon: "👤", path: "/profile" },
-    { id: "parent", label: "Ouders", icon: "👨‍👩‍👧", path: "/parent-info" },
+    { id: "actions", label: "Acties", icon: "💪", path: "/actions" },
   ];
 
   return (

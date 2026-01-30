@@ -15,6 +15,13 @@
       "when": 1769787512503,
       "tag": "0001_hot_living_mummy",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1769790781735,
+      "tag": "0002_noisy_squadron_sinister",
+      "breakpoints": true
     }
   ]
 }

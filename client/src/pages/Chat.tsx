@@ -3,6 +3,8 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { THEMES, type ThemeId, type ChatMessage } from "@shared/matti-types";
 import { useMattiTheme } from "@/contexts/MattiThemeContext";
+import { detectAction } from "@shared/action-detection";
+import { toast } from "sonner";
 
 export default function Chat() {
   const { user } = useAuth();
@@ -78,6 +80,7 @@ export default function Chat() {
   const saveMessage = trpc.chat.saveMessage.useMutation();
   const summarize = trpc.assistant.summarize.useMutation();
   const updateSummary = trpc.chat.updateSummary.useMutation();
+  const saveAction = trpc.action.saveAction.useMutation();
 
   const handleSendMessage = async () => {
     if (!inputText.trim() || !user) return;
@@ -137,14 +140,40 @@ export default function Chat() {
         threadId: response.threadId,
       });
 
-      // Add assistant response to UI
+      // Detect action in AI response
+      const actionDetection = detectAction(response.reply);
+      
+      // Add assistant response to UI (with clean response if action detected)
       const aiMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        content: response.reply,
+        content: actionDetection ? actionDetection.cleanResponse : response.reply,
         isAI: true,
         timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, aiMsg]);
+
+      // Save action if detected
+      if (actionDetection) {
+        try {
+          const actionResult = await saveAction.mutateAsync({
+            themeId: currentThemeId,
+            actionText: actionDetection.actionText,
+            conversationId: conversation?.id,
+          });
+          console.log('[ActionTracking] Action saved:', actionDetection.actionText);
+          
+          // Show toast notification
+          toast.success("💪 Actie opgeslagen!", {
+            description: actionDetection.actionText,
+            action: {
+              label: "Bekijk",
+              onClick: () => window.location.href = "/actions",
+            },
+          });
+        } catch (error) {
+          console.error('[ActionTracking] Failed to save action:', error);
+        }
+      }
 
       // Refresh conversation to get updated threadId
       await refetchConversation();
@@ -379,8 +408,8 @@ function TabNavigation({ currentTab }: { currentTab: string }) {
     { id: "chat", label: "Chat", icon: "💬", path: "/chat" },
     { id: "history", label: "Geschiedenis", icon: "📜", path: "/history" },
     { id: "themes", label: "Thema's", icon: "🎨", path: "/themes" },
+    { id: "actions", label: "Acties", icon: "💪", path: "/actions" },
     { id: "profile", label: "Profiel", icon: "👤", path: "/profile" },
-    { id: "parent", label: "Ouders", icon: "👨‍👩‍👧", path: "/parent-info" },
   ];
 
   return (
