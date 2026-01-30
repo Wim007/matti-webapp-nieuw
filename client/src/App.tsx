@@ -4,32 +4,43 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
+
+// Onboarding screens
+import Welcome from "./pages/onboarding/Welcome";
+import Account from "./pages/onboarding/Account";
+
+// Main app screens
+import Chat from "./pages/Chat";
+import History from "./pages/History";
+import Themes from "./pages/Themes";
+import Profile from "./pages/Profile";
+import ParentInfo from "./pages/ParentInfo";
 
 function Router() {
-  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
+      {/* Onboarding flow */}
+      <Route path="/" component={Welcome} />
+      <Route path="/onboarding/welcome" component={Welcome} />
+      <Route path="/onboarding/account" component={Account} />
+      
+      {/* Main app tabs */}
+      <Route path="/chat" component={Chat} />
+      <Route path="/history" component={History} />
+      <Route path="/themes" component={Themes} />
+      <Route path="/profile" component={Profile} />
+      <Route path="/parent-info" component={ParentInfo} />
+      
+      <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
   );
 }
 
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
-
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="light"
-        // switchable
-      >
+      <ThemeProvider defaultTheme="light">
         <TooltipProvider>
           <Toaster />
           <Router />

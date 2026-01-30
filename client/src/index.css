@@ -43,7 +43,10 @@
 }
 
 :root {
-  --primary: var(--color-blue-700);
+  --primary: 262 83% 58%; /* #8B5CF6 - Matti purple */
+  --surface: 0 0% 98%; /* Light gray for chat bubbles */
+  --ai-bubble: 0 0% 98%; /* Same as surface */
+  /* Original primary kept for reference: var(--color-blue-700); */
   --primary-foreground: var(--color-blue-50);
   --sidebar-primary: var(--color-blue-600);
   --sidebar-primary-foreground: var(--color-blue-50);
@@ -173,5 +176,58 @@
       padding-right: 2rem;
       max-width: 1280px; /* Standard content width */
     }
+  }
+
+  /* Exact theme gradients from Matti mobile app */
+  .theme-general-gradient {
+    background: linear-gradient(90deg, #8B5CF6 0%, #A78BFA 100%);
+  }
+  .theme-school-gradient {
+    background: linear-gradient(90deg, #3B82F6 0%, #60A5FA 100%);
+  }
+  .theme-friends-gradient {
+    background: linear-gradient(90deg, #10B981 0%, #34D399 100%);
+  }
+  .theme-home-gradient {
+    background: linear-gradient(90deg, #F97316 0%, #FB923C 100%);
+  }
+  .theme-feelings-gradient {
+    background: linear-gradient(90deg, #EC4899 0%, #F472B6 100%);
+  }
+  .theme-love-gradient {
+    background: linear-gradient(90deg, #EF4444 0%, #F87171 100%);
+  }
+  .theme-freetime-gradient {
+    background: linear-gradient(90deg, #FBBF24 0%, #FCD34D 100%);
+  }
+  .theme-future-gradient {
+    background: linear-gradient(90deg, #06B6D4 0%, #22D3EE 100%);
+  }
+  .theme-self-gradient {
+    background: linear-gradient(90deg, #6366F1 0%, #818CF8 100%);
+  }
+
+  /* Typing indicator animation */
+  @keyframes typing-dot {
+    0%, 100% {
+      opacity: 0.3;
+      transform: translateY(0);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(-4px);
+    }
+  }
+
+  .typing-dot {
+    animation: typing-dot 0.8s ease-in-out infinite;
+  }
+
+  .typing-dot:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  .typing-dot:nth-child(3) {
+    animation-delay: 0.3s;
   }
 }
