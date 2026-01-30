@@ -1,7 +1,10 @@
 import { useState, useRef, useEffect } from "react";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { trpc } from "@/lib/trpc";
 import { THEMES, type ThemeId, type ChatMessage } from "@shared/matti-types";
 
 export default function Chat() {
+  const { user } = useAuth();
   const [currentThemeId, setCurrentThemeId] = useState<ThemeId>("general");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState("");
@@ -10,32 +13,50 @@ export default function Chat() {
 
   const currentTheme = THEMES.find((t) => t.id === currentThemeId)!;
 
-  // Load welcome message on mount
+  // Fetch conversation for current theme
+  const { data: conversation, refetch: refetchConversation } = trpc.chat.getConversation.useQuery(
+    { themeId: currentThemeId },
+    { enabled: !!user }
+  );
+
+  // Load messages from conversation
   useEffect(() => {
-    const profile = localStorage.getItem("matti_user_profile");
-    const userName = profile ? JSON.parse(profile).name : "daar";
+    if (conversation?.messages) {
+      const loadedMessages: ChatMessage[] = (conversation.messages as Array<{
+        role: "user" | "assistant";
+        content: string;
+        timestamp: string;
+      }>).map((msg, index) => ({
+        id: `${conversation.id}-${index}`,
+        content: msg.content,
+        isAI: msg.role === "assistant",
+        timestamp: msg.timestamp,
+      }));
+      setMessages(loadedMessages);
+    } else if (user) {
+      // Show welcome message if no conversation exists
+      const greetings = ["Hé", "Hey", "Yo"];
+      const phrases = [
+        "Chill dat je er bent!",
+        "Goed dat je er bent!",
+        "Leuk dat je er bent!",
+        "Wat fijn dat je er bent!",
+      ];
+      const emojis = ["👋", "✨", "😊", "💬", "🎯"];
 
-    const greetings = ["Hé", "Hey", "Yo"];
-    const phrases = [
-      "Chill dat je er bent!",
-      "Goed dat je er bent!",
-      "Leuk dat je er bent!",
-      "Wat fijn dat je er bent!",
-    ];
-    const emojis = ["👋", "✨", "😊", "💬", "🎯"];
+      const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+      const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+      const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
 
-    const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
-    const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-    const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-
-    const welcomeMsg: ChatMessage = {
-      id: Date.now().toString(),
-      content: `${randomGreeting} ${userName}! ${randomPhrase} ${randomEmoji}\n\nWaar wil je het over hebben?`,
-      isAI: true,
-      timestamp: new Date().toISOString(),
-    };
-    setMessages([welcomeMsg]);
-  }, []);
+      const welcomeMsg: ChatMessage = {
+        id: Date.now().toString(),
+        content: `${randomGreeting} ${user.name || "daar"}! ${randomPhrase} ${randomEmoji}\n\nWaar wil je het over hebben?`,
+        isAI: true,
+        timestamp: new Date().toISOString(),
+      };
+      setMessages([welcomeMsg]);
+    }
+  }, [conversation, user]);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -44,8 +65,12 @@ export default function Chat() {
     }
   }, [messages, isTyping]);
 
-  const handleSendMessage = () => {
-    if (!inputText.trim()) return;
+  // Mutations
+  const sendToAssistant = trpc.assistant.send.useMutation();
+  const saveMessage = trpc.chat.saveMessage.useMutation();
+
+  const handleSendMessage = async () => {
+    if (!inputText.trim() || !user) return;
 
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
@@ -55,25 +80,74 @@ export default function Chat() {
     };
 
     setMessages((prev) => [...prev, userMsg]);
+    const messageText = inputText.trim();
     setInputText("");
     setIsTyping(true);
 
-    // Mock AI response
-    setTimeout(() => {
+    try {
+      // Save user message to database
+      await saveMessage.mutateAsync({
+        themeId: currentThemeId,
+        role: "user",
+        content: messageText,
+      });
+
+      // Build context from recent messages
+      const recentMessages = messages.slice(-8);
+      const context = recentMessages
+        .map((m) => `${m.isAI ? "Matti" : "Gebruiker"}: ${m.content}`)
+        .join("\n");
+
+      // Send to OpenAI Assistant
+      const response = await sendToAssistant.mutateAsync({
+        message: messageText,
+        threadId: conversation?.threadId || undefined,
+        context,
+        themeId: currentThemeId,
+        userProfile: user.age && user.gender && user.gender !== "none"
+          ? {
+              name: user.name || "",
+              age: user.age,
+              gender: user.gender,
+            }
+          : undefined,
+      });
+
+      // Save assistant response and threadId
+      await saveMessage.mutateAsync({
+        themeId: currentThemeId,
+        role: "assistant",
+        content: response.reply,
+        threadId: response.threadId,
+      });
+
+      // Add assistant response to UI
       const aiMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        content: "Ik hoor je! Vertel me meer...",
+        content: response.reply,
         isAI: true,
         timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, aiMsg]);
+
+      // Refresh conversation to get updated threadId
+      refetchConversation();
+    } catch (error) {
+      console.error("Error sending message:", error);
+      const errorMsg: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        content: "Sorry, er ging iets mis. Probeer het nog eens! 🔄",
+        isAI: true,
+        timestamp: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, errorMsg]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   const handleNewChat = () => {
-    const profile = localStorage.getItem("matti_user_profile");
-    const userName = profile ? JSON.parse(profile).name : "";
+    if (!user) return;
 
     const greetings = ["Hé", "Hey", "Yo"];
     const phrases = [
@@ -90,7 +164,7 @@ export default function Chat() {
 
     const welcomeMessage: ChatMessage = {
       id: Date.now().toString(),
-      content: `${randomGreeting} ${userName}! ${randomPhrase} ${randomEmoji}\n\nWaar wil je het over hebben?`,
+      content: `${randomGreeting} ${user.name || "daar"}! ${randomPhrase} ${randomEmoji}\n\nWaar wil je het over hebben?`,
       isAI: true,
       timestamp: new Date().toISOString(),
     };
@@ -153,13 +227,14 @@ export default function Chat() {
             }}
             placeholder="Type je bericht..."
             maxLength={500}
-            className="flex-1 bg-surface text-foreground px-4 py-3 rounded-full text-base placeholder:text-muted-foreground border-0 outline-none focus:ring-2 focus:ring-primary"
+            disabled={isTyping}
+            className="flex-1 bg-surface text-foreground px-4 py-3 rounded-full text-base placeholder:text-muted-foreground border-0 outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
           />
           <button
             onClick={handleSendMessage}
-            disabled={!inputText.trim()}
+            disabled={!inputText.trim() || isTyping}
             className={`w-12 h-12 rounded-full flex items-center justify-center ${
-              !inputText.trim() ? "opacity-50" : "hover:opacity-80"
+              !inputText.trim() || isTyping ? "opacity-50" : "hover:opacity-80"
             } transition-opacity`}
             style={{
               background: `linear-gradient(90deg, ${currentTheme.colors.gradient[0]} 0%, ${currentTheme.colors.gradient[1]} 100%)`,

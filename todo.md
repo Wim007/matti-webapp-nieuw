@@ -76,3 +76,40 @@
 - [ ] Analytics tracking
 - [ ] Follow-up scheduling
 - [ ] Action detection
+
+## FASE 2: OpenAI Assistant API Integration (IN PROGRESS)
+
+### Extract Existing Configuration
+- [x] Find OpenAI Assistant API setup in original repo
+- [x] Extract API key and Assistant ID from existing code
+- [x] Identify thread management logic
+
+### Server-Side Implementation
+- [x] Create OpenAI Assistant API helper functions (assistantRouter.ts)
+- [x] Implement thread creation per theme
+- [x] Implement message sending (no streaming yet)
+- [x] Implement conversation context management
+- [x] Add error handling
+
+### Database Integration
+- [x] Update conversations table to store threadId (already in schema)
+- [x] Create helper functions for thread persistence (chatRouter.ts)
+- [x] Implement conversation history retrieval
+
+### tRPC Procedures
+- [x] Create chat.saveMessage mutation
+- [x] Create chat.getConversation query
+- [x] Create assistant.send mutation
+- [x] Add proper error responses
+
+### Frontend Updates
+- [x] Replace mock AI responses with tRPC calls
+- [ ] Implement message streaming UI (not yet)
+- [x] Add loading states and error handling
+- [x] Update typing indicator based on real status
+
+### Testing
+- [ ] Test conversation flow end-to-end (needs API keys)
+- [ ] Test thread persistence across sessions
+- [ ] Test error scenarios
+- [ ] Create vitest tests for API integration
