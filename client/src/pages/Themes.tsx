@@ -1,6 +1,16 @@
 import { THEMES } from "@shared/matti-types";
+import { useMattiTheme } from "@/contexts/MattiThemeContext";
+import { useLocation } from "wouter";
 
 export default function Themes() {
+  const { setCurrentThemeId } = useMattiTheme();
+  const [, setLocation] = useLocation();
+
+  const handleThemeClick = (themeId: string) => {
+    setCurrentThemeId(themeId as any);
+    setLocation("/chat");
+  };
+
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
@@ -15,9 +25,9 @@ export default function Themes() {
       <div className="flex-1 px-6 py-6 bg-background overflow-y-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {THEMES.map((theme) => (
-            <a
+            <button
               key={theme.id}
-              href="/chat"
+              onClick={() => handleThemeClick(theme.id)}
               className="block p-5 rounded-2xl border-2 border-border hover:border-primary transition-colors"
               style={{
                 background: `linear-gradient(135deg, ${theme.colors.gradient[0]}15 0%, ${theme.colors.gradient[1]}15 100%)`,
@@ -34,7 +44,7 @@ export default function Themes() {
                   </p>
                 </div>
               </div>
-            </a>
+            </button>
           ))}
         </div>
       </div>

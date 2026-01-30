@@ -2,10 +2,11 @@ import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { THEMES, type ThemeId, type ChatMessage } from "@shared/matti-types";
+import { useMattiTheme } from "@/contexts/MattiThemeContext";
 
 export default function Chat() {
   const { user } = useAuth();
-  const [currentThemeId, setCurrentThemeId] = useState<ThemeId>("general");
+  const { currentThemeId } = useMattiTheme();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -16,8 +17,15 @@ export default function Chat() {
   // Fetch conversation for current theme
   const { data: conversation, refetch: refetchConversation } = trpc.chat.getConversation.useQuery(
     { themeId: currentThemeId },
-    { enabled: !!user }
+    { enabled: !!user, refetchOnMount: true }
   );
+
+  // Refetch conversation when theme changes
+  useEffect(() => {
+    if (user) {
+      refetchConversation();
+    }
+  }, [currentThemeId, user, refetchConversation]);
 
   // Load messages from conversation
   useEffect(() => {

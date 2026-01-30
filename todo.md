@@ -113,3 +113,11 @@
 - [ ] Test thread persistence across sessions
 - [ ] Test error scenarios
 - [ ] Create vitest tests for API integration
+
+## Theme Switching Implementation (COMPLETED)
+
+- [x] Create ThemeContext for global theme state (MattiThemeContext)
+- [x] Update Themes page to handle theme selection clicks
+- [x] Update Chat page to load conversation based on current theme
+- [x] Theme persists in localStorage
+- [ ] Test theme switching flow end-to-end (needs testing)
