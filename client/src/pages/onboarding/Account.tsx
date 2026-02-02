@@ -193,14 +193,14 @@ export default function Account() {
             className="flex items-start gap-3 bg-surface border border-border rounded-xl p-4 w-full text-left hover:opacity-90 transition-opacity"
           >
             <div
-              className={`w-6 h-6 rounded border-2 ${
-                analyticsConsent
-                  ? "bg-primary border-primary"
-                  : "border-border"
-              } flex items-center justify-center mt-0.5 flex-shrink-0`}
+              className={`w-6 h-6 rounded flex items-center justify-center mt-0.5 flex-shrink-0`}
+              style={{
+                border: analyticsConsent ? '3px solid #7cd5f3' : '3px solid #999',
+                backgroundColor: analyticsConsent ? '#7cd5f3' : '#fff'
+              }}
             >
               {analyticsConsent && (
-                <span className="text-white font-bold text-sm" style={{color: '#3c2525'}}>✓</span>
+                <span className="text-white font-bold text-lg">✓</span>
               )}
             </div>
             <div className="flex-1">

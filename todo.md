@@ -190,3 +190,9 @@
 - [x] Update Profile page with consistent colors (gradient header, #f5f9ff background)
 - [x] Update History page with consistent colors (gradient header, #f5f9ff background)
 - [x] Ensure visual cohesion across all pages
+
+## Checkbox Visibility Fix (COMPLETED)
+
+- [x] Make analytics consent checkbox clearly visible with 3px border (#999 unchecked, #7cd5f3 checked)
+- [x] White background when unchecked, blue (#7cd5f3) when checked
+- [ ] Test checkbox visibility on Account page
