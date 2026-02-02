@@ -5,6 +5,7 @@ import { THEMES } from "@shared/matti-types";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { CheckCircle2, Circle, XCircle, TrendingUp } from "lucide-react";
+import confetti from "canvas-confetti";
 
 export default function Actions() {
   const { user } = useAuth();
@@ -32,7 +33,14 @@ export default function Actions() {
 
   const handleMarkCompleted = async (actionId: number) => {
     await updateStatus.mutateAsync({ actionId, status: "completed" });
-    // TODO: Show reward animation
+    
+    // Trigger confetti animation
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#c7b8ff', '#aaf2f3', '#7cd5f3', '#a2f1d9', '#deb4e4']
+    });
   };
 
   const handleMarkCancelled = async (actionId: number) => {

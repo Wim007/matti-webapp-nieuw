@@ -202,3 +202,9 @@
 - [x] Update Actions page header with purple-to-blue gradient (#c7b8ff → #aaf2f3)
 - [x] Update Actions page background to light blue (#f5f9ff)
 - [x] Ensure visual consistency with Chat, Themes, Profile, History pages
+
+## Confetti Reward Animation (COMPLETED)
+
+- [x] Install canvas-confetti library
+- [x] Integrate confetti in Actions page when marking action as completed (100 particles, spread 70, Matti colors)
+- [ ] Test confetti animation (needs actions to complete)
