@@ -219,3 +219,7 @@
 ## Bug Fixes
 - [x] Chat welcome message moet naam uit localStorage gebruiken (niet Manus account naam)
 - [x] "Nieuw Gesprek" knop moet nieuwe OpenAI thread aanmaken (nu laadt het oude berichten)
+
+## UX Improvements
+- [x] Welcome pagina: grappige puber-afbeelding toevoegen (bovenaan, groot)
+- [x] Welcome pagina: info-kaarten naar beneden verplaatsen (onder afbeelding)

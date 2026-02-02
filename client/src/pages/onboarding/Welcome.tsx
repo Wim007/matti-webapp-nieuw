@@ -15,6 +15,15 @@ export default function Welcome() {
             </h1>
           </div>
 
+          {/* Humorous Teen Image */}
+          <div className="flex justify-center">
+            <img 
+              src="https://files.manuscdn.com/user_upload_by_module/session_file/310419663030245921/idHgRDPaipBPClXU.jpg" 
+              alt="Puber met puistjes kijkt geschrokken in de spiegel" 
+              className="w-64 h-64 object-cover rounded-3xl shadow-lg"
+            />
+          </div>
+
           {/* Main Content */}
           <div className="flex flex-col gap-6">
             {/* Description */}
