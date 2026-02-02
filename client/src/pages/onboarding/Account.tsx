@@ -169,7 +169,7 @@ export default function Account() {
                   selectedGender === option.value
                     ? "border-primary"
                     : "border-border"
-                } rounded-xl px-4 py-3 flex items-center gap-3 hover:opacity-90 transition-opacity`} style={{backgroundColor: '#f3a5a5'}}
+                } rounded-xl px-4 py-3 flex items-center gap-3 hover:opacity-90 transition-opacity`} style={{backgroundColor: option.color}}
               >
                 <span className="text-2xl">{option.emoji}</span>
                 <span

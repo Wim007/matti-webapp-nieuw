@@ -117,8 +117,8 @@ export const AGE_RANGE = {
 };
 
 export const GENDER_OPTIONS = [
-  { value: 'boy', label: 'Jongen', emoji: '👦' },
-  { value: 'girl', label: 'Meisje', emoji: '👧' },
-  { value: 'other', label: 'Anders', emoji: '🌈' },
-  { value: 'prefer_not_to_say', label: 'Zeg ik liever niet', emoji: '🤐' }
+  { value: 'boy', label: 'Jongen', emoji: '👦', color: '#a5c7f3' },
+  { value: 'girl', label: 'Meisje', emoji: '👧', color: '#deb4e4' },
+  { value: 'other', label: 'Anders', emoji: '🌈', color: '#a2f1d9' },
+  { value: 'prefer_not_to_say', label: 'Zeg ik liever niet', emoji: '🤐', color: '#c5e4be' }
 ];
