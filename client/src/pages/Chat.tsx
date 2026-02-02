@@ -397,7 +397,7 @@ function ChatBubble({ message }: { message: ChatMessage }) {
         >
           <p
             className={`text-base leading-relaxed whitespace-pre-wrap ${
-              message.isAI ? "text-foreground" : "text-white"
+              message.isAI ? "text-foreground" : "text-black"
             }`}
           >
             {message.content}

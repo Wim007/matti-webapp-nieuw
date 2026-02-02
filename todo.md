@@ -223,3 +223,10 @@
 ## UX Improvements
 - [x] Welcome pagina: grappige puber-afbeelding toevoegen (bovenaan, groot)
 - [x] Welcome pagina: info-kaarten naar beneden verplaatsen (onder afbeelding)
+
+## Critical Bugs
+- [ ] Chat geeft geen antwoord meer op berichten
+- [ ] Onboarding data (naam, leeftijd, postcode, geslacht) wordt niet opgeslagen - gebruiker moet iedere keer opnieuw invullen
+
+## UI Fixes
+- [x] Gebruikersvragen (user messages) moeten zwarte tekst hebben in plaats van wit
