@@ -215,3 +215,6 @@
 - [x] Chat als standaard startpagina na onboarding
 - [x] Altijd theme "general" als default
 - [x] Verifieer dat interne thema-logica intact blijft (DB, follow-ups, acties, summaries)
+
+## Bug Fixes
+- [x] Chat welcome message moet naam uit localStorage gebruiken (niet Manus account naam)

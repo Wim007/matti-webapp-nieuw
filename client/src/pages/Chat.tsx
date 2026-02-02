@@ -45,6 +45,18 @@ export default function Chat() {
       setMessages(loadedMessages);
     } else if (user) {
       // Show welcome message if no conversation exists
+      // Get name from localStorage profile (onboarding), not from Manus account
+      const profileData = localStorage.getItem("matti_user_profile");
+      let userName = "daar";
+      if (profileData) {
+        try {
+          const profile = JSON.parse(profileData);
+          userName = profile.name || "daar";
+        } catch (e) {
+          console.error("Failed to parse profile:", e);
+        }
+      }
+
       const greetings = ["Hé", "Hey", "Yo"];
       const phrases = [
         "Chill dat je er bent!",
@@ -60,7 +72,7 @@ export default function Chat() {
 
       const welcomeMsg: ChatMessage = {
         id: Date.now().toString(),
-        content: `${randomGreeting} ${user.name || "daar"}! ${randomPhrase} ${randomEmoji}\n\nWaar wil je het over hebben?`,
+        content: `${randomGreeting} ${userName}! ${randomPhrase} ${randomEmoji}\n\nWaar wil je het over hebben?`,
         isAI: true,
         timestamp: new Date().toISOString(),
       };
