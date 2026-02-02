@@ -281,7 +281,7 @@ export default function Chat() {
       {/* Messages */}
       <div
         ref={scrollRef}
-        className="flex-1 px-4 pt-4 pb-4 overflow-y-auto" style={{backgroundColor: '#f5f9ff'}}
+        className="flex-1 px-4 pt-4 pb-4 overflow-y-auto" style={{backgroundColor: '#e1edfe'}}
       >
         {messages.map((message) => (
           <ChatBubble key={message.id} message={message} />

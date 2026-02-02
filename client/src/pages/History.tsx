@@ -111,7 +111,7 @@ export default function History() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 px-4 py-6 overflow-y-auto" style={{backgroundColor: '#f5f9ff'}}>
+      <div className="flex-1 px-4 py-6 overflow-y-auto" style={{backgroundColor: '#e5f0ff'}}>
         <div className="space-y-8 max-w-2xl mx-auto">
           {groupOrder.map((groupName) => {
             const groupConvos = groupedConversations?.[groupName];
@@ -133,7 +133,7 @@ export default function History() {
                       <button
                         key={convo.id}
                         onClick={() => handleResumeConversation(convo.themeId)}
-                        className="w-full bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all border border-gray-100 text-left group"
+                        className="w-full bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all border border-gray-100 text-left group" style={{backgroundColor: '#f3d3ef'}}
                       >
                         <div className="flex items-start gap-3">
                           {/* Theme Icon */}
