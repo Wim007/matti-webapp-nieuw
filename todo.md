@@ -208,3 +208,10 @@
 - [x] Install canvas-confetti library
 - [x] Integrate confetti in Actions page when marking action as completed (100 particles, spread 70, Matti colors)
 - [ ] Test confetti animation (needs actions to complete)
+
+## UX Vereenvoudiging (Fase 3)
+- [x] Verwijder Themes tab uit navigatie
+- [x] Verwijder Themes.tsx route uit App.tsx
+- [x] Chat als standaard startpagina na onboarding
+- [x] Altijd theme "general" als default
+- [x] Verifieer dat interne thema-logica intact blijft (DB, follow-ups, acties, summaries)

@@ -90,10 +90,10 @@ export default function History() {
             Start een gesprek met Matti over een thema dat je bezighoudt. Je gesprekken worden hier bewaard.
           </p>
           <button
-            onClick={() => setLocation("/themes")}
+            onClick={() => setLocation("/chat")}
             className="px-6 py-3 text-white rounded-xl font-medium hover:opacity-90 transition-all shadow-lg" style={{background: 'linear-gradient(90deg, #c7b8ff 0%, #aaf2f3 100%)'}}
           >
-            Kies een thema
+            Start een gesprek
           </button>
         </div>
 
@@ -201,7 +201,7 @@ function TabNavigation({ currentTab }: { currentTab: string }) {
   const tabs = [
     { id: "chat", label: "Chat", icon: "💬", path: "/chat" },
     { id: "history", label: "Geschiedenis", icon: "📜", path: "/history" },
-    { id: "themes", label: "Thema's", icon: "🎨", path: "/themes" },
+
     { id: "profile", label: "Profiel", icon: "👤", path: "/profile" },
     { id: "actions", label: "Acties", icon: "💪", path: "/actions" },
   ];

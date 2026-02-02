@@ -126,7 +126,7 @@ function TabNavigation({ currentTab }: { currentTab: string }) {
   const tabs = [
     { id: "chat", label: "Chat", icon: "💬", path: "/chat" },
     { id: "history", label: "Geschiedenis", icon: "📜", path: "/history" },
-    { id: "themes", label: "Thema's", icon: "🎨", path: "/themes" },
+
     { id: "profile", label: "Profiel", icon: "👤", path: "/profile" },
     { id: "actions", label: "Acties", icon: "💪", path: "/actions" },
   ];
