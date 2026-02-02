@@ -52,12 +52,12 @@ export default function History() {
     return (
       <div className="h-screen flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-4">
+        <div className="px-6 py-4" style={{background: 'linear-gradient(90deg, #c7b8ff 0%, #aaf2f3 100%)'}}>
           <h1 className="text-2xl font-bold text-white">Geschiedenis</h1>
         </div>
 
         {/* Loading State */}
-        <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-blue-50">
+        <div className="flex-1 flex items-center justify-center" style={{backgroundColor: '#f5f9ff'}}>
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
             <p className="text-gray-600">Geschiedenis laden...</p>
@@ -74,12 +74,12 @@ export default function History() {
     return (
       <div className="h-screen flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-4">
+        <div className="px-6 py-4" style={{background: 'linear-gradient(90deg, #c7b8ff 0%, #aaf2f3 100%)'}}>
           <h1 className="text-2xl font-bold text-white">Geschiedenis</h1>
         </div>
 
         {/* Empty State */}
-        <div className="flex-1 flex flex-col items-center justify-center px-6 bg-gradient-to-br from-purple-50 via-white to-blue-50">
+        <div className="flex-1 flex flex-col items-center justify-center px-6" style={{backgroundColor: '#f5f9ff'}}>
           <div className="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mb-6">
             <MessageSquare className="w-12 h-12 text-purple-600" />
           </div>
@@ -91,7 +91,7 @@ export default function History() {
           </p>
           <button
             onClick={() => setLocation("/themes")}
-            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl font-medium hover:from-purple-700 hover:to-purple-800 transition-all shadow-lg"
+            className="px-6 py-3 text-white rounded-xl font-medium hover:opacity-90 transition-all shadow-lg" style={{background: 'linear-gradient(90deg, #c7b8ff 0%, #aaf2f3 100%)'}}
           >
             Kies een thema
           </button>
@@ -111,7 +111,7 @@ export default function History() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 px-4 py-6 bg-gradient-to-br from-purple-50 via-white to-blue-50 overflow-y-auto">
+      <div className="flex-1 px-4 py-6 overflow-y-auto" style={{backgroundColor: '#f5f9ff'}}>
         <div className="space-y-8 max-w-2xl mx-auto">
           {groupOrder.map((groupName) => {
             const groupConvos = groupedConversations?.[groupName];

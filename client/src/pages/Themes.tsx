@@ -14,7 +14,7 @@ export default function Themes() {
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
-      <div className="bg-primary px-6 py-4">
+      <div className="px-6 py-4" style={{background: 'linear-gradient(90deg, #c7b8ff 0%, #aaf2f3 100%)'}}>
         <h1 className="text-2xl font-bold text-white">Thema's</h1>
         <p className="text-sm text-white/80 mt-1">
           Kies een thema om over te praten
@@ -22,7 +22,7 @@ export default function Themes() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 px-6 py-6 bg-background overflow-y-auto">
+      <div className="flex-1 px-6 py-6 overflow-y-auto" style={{backgroundColor: '#f5f9ff'}}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {THEMES.map((theme) => (
             <button

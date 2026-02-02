@@ -269,7 +269,7 @@ export default function Chat() {
           {/* New Chat Button */}
           <button
             onClick={handleNewChat}
-            className="bg-white/20 px-4 py-2 rounded-full hover:opacity-70 transition-opacity"
+            className="px-4 py-2 rounded-full hover:opacity-70 transition-opacity" style={{backgroundColor: 'rgba(255,255,255,0.3)'}}
           >
             <span className="text-white font-semibold text-sm">
               Nieuw Gesprek
@@ -281,7 +281,7 @@ export default function Chat() {
       {/* Messages */}
       <div
         ref={scrollRef}
-        className="flex-1 px-4 pt-4 pb-4 overflow-y-auto bg-background"
+        className="flex-1 px-4 pt-4 pb-4 overflow-y-auto" style={{backgroundColor: '#f5f9ff'}}
       >
         {messages.map((message) => (
           <ChatBubble key={message.id} message={message} />
@@ -290,7 +290,7 @@ export default function Chat() {
       </div>
 
       {/* Input Area */}
-      <div className="px-4 pb-4 pt-2 border-t border-border bg-background">
+      <div className="px-4 pb-4 pt-2 border-t border-border" style={{backgroundColor: '#f5f9ff'}}>
         <div className="flex items-center gap-2">
           <input
             type="text"
@@ -305,7 +305,7 @@ export default function Chat() {
             placeholder="Type je bericht..."
             maxLength={500}
             disabled={isTyping}
-            className="flex-1 bg-surface text-foreground px-4 py-3 rounded-full text-base placeholder:text-muted-foreground border-0 outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
+            className="flex-1 text-foreground px-4 py-3 rounded-full text-base placeholder:text-muted-foreground border-0 outline-none focus:ring-2 focus:ring-primary disabled:opacity-50" style={{backgroundColor: '#e8f4f8'}}
           />
           <button
             onClick={handleSendMessage}

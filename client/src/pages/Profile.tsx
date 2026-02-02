@@ -21,12 +21,12 @@ export default function Profile() {
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
-      <div className="bg-primary px-6 py-4">
+      <div className="px-6 py-4" style={{background: 'linear-gradient(90deg, #c7b8ff 0%, #aaf2f3 100%)'}}>
         <h1 className="text-2xl font-bold text-white">Profiel</h1>
       </div>
 
       {/* Content */}
-      <div className="flex-1 px-6 py-6 bg-background overflow-y-auto">
+      <div className="flex-1 px-6 py-6 overflow-y-auto" style={{backgroundColor: '#f5f9ff'}}>
         {profile ? (
           <div className="max-w-2xl mx-auto space-y-6">
             {/* User Info Card */}
