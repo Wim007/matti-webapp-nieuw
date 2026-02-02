@@ -218,3 +218,4 @@
 
 ## Bug Fixes
 - [x] Chat welcome message moet naam uit localStorage gebruiken (niet Manus account naam)
+- [x] "Nieuw Gesprek" knop moet nieuwe OpenAI thread aanmaken (nu laadt het oude berichten)

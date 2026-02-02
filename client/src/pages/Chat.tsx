@@ -93,6 +93,7 @@ export default function Chat() {
   const summarize = trpc.assistant.summarize.useMutation();
   const updateSummary = trpc.chat.updateSummary.useMutation();
   const saveAction = trpc.action.saveAction.useMutation();
+  const deleteConversation = trpc.chat.deleteConversation.useMutation();
 
   const handleSendMessage = async () => {
     if (!inputText.trim() || !user) return;
@@ -235,29 +236,52 @@ export default function Chat() {
     }
   };
 
-  const handleNewChat = () => {
+  const handleNewChat = async () => {
     if (!user) return;
 
-    const greetings = ["Hé", "Hey", "Yo"];
-    const phrases = [
-      "Chill dat je er bent!",
-      "Goed dat je er bent!",
-      "Leuk dat je er bent!",
-      "Wat fijn dat je er bent!",
-    ];
-    const emojis = ["👋", "✨", "😊", "💬", "🎯"];
+    try {
+      // Delete existing conversation (including threadId)
+      await deleteConversation.mutateAsync({ themeId: currentThemeId });
+      
+      // Refetch to create new empty conversation
+      await refetchConversation();
+      
+      // Show fresh welcome message
+      // Get name from localStorage profile
+      const profileData = localStorage.getItem("matti_user_profile");
+      let userName = "daar";
+      if (profileData) {
+        try {
+          const profile = JSON.parse(profileData);
+          userName = profile.name || "daar";
+        } catch (e) {
+          console.error("Failed to parse profile:", e);
+        }
+      }
 
-    const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
-    const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-    const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+      const greetings = ["Hé", "Hey", "Yo"];
+      const phrases = [
+        "Chill dat je er bent!",
+        "Goed dat je er bent!",
+        "Leuk dat je er bent!",
+        "Wat fijn dat je er bent!",
+      ];
+      const emojis = ["👋", "✨", "😊", "💬", "🎯"];
 
-    const welcomeMessage: ChatMessage = {
-      id: Date.now().toString(),
-      content: `${randomGreeting} ${user.name || "daar"}! ${randomPhrase} ${randomEmoji}\n\nWaar wil je het over hebben?`,
-      isAI: true,
-      timestamp: new Date().toISOString(),
-    };
-    setMessages([welcomeMessage]);
+      const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+      const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+      const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+
+      const welcomeMessage: ChatMessage = {
+        id: Date.now().toString(),
+        content: `${randomGreeting} ${userName}! ${randomPhrase} ${randomEmoji}\n\nWaar wil je het over hebben?`,
+        isAI: true,
+        timestamp: new Date().toISOString(),
+      };
+      setMessages([welcomeMessage]);
+    } catch (error) {
+      console.error("Failed to start new chat:", error);
+    }
   };
 
   return (

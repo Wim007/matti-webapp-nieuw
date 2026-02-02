@@ -221,6 +221,34 @@ export const chatRouter = router({
 
       return { success: true };
     }),
+
+  /**
+   * Delete conversation (for "Nieuw Gesprek" - creates fresh start)
+   */
+  deleteConversation: protectedProcedure
+    .input(z.object({
+      themeId: themeIdEnum,
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) {
+        throw new Error("Database not available");
+      }
+
+      const userId = ctx.user.id;
+      const { themeId } = input;
+
+      await db
+        .delete(conversations)
+        .where(
+          and(
+            eq(conversations.userId, userId),
+            eq(conversations.themeId, themeId as ThemeId)
+          )
+        );
+
+      return { success: true };
+    }),
 });
 
 export type ChatRouter = typeof chatRouter;
