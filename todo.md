@@ -196,3 +196,9 @@
 - [x] Make analytics consent checkbox clearly visible with 3px border (#999 unchecked, #7cd5f3 checked)
 - [x] White background when unchecked, blue (#7cd5f3) when checked
 - [ ] Test checkbox visibility on Account page
+
+## Actions Page Consistent Styling (COMPLETED)
+
+- [x] Update Actions page header with purple-to-blue gradient (#c7b8ff → #aaf2f3)
+- [x] Update Actions page background to light blue (#f5f9ff)
+- [x] Ensure visual consistency with Chat, Themes, Profile, History pages
