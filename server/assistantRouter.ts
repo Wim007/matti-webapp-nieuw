@@ -128,9 +128,24 @@ export const assistantRouter = router({
       } catch (error) {
         console.error('[Assistant] Error:', error);
         
+        // If there's an error and no existing threadId, create a new thread for next attempt
+        // This prevents saving 'error' as threadId in database
+        let errorThreadId = input.threadId;
+        if (!errorThreadId) {
+          try {
+            const newThread = await openai.beta.threads.create();
+            errorThreadId = newThread.id;
+            console.log('[Assistant] Created fallback thread after error:', errorThreadId);
+          } catch (threadError) {
+            console.error('[Assistant] Failed to create fallback thread:', threadError);
+            // If we can't create a thread, return empty string to force new thread on retry
+            errorThreadId = '';
+          }
+        }
+        
         return {
           reply: 'Sorry, er ging iets mis. Probeer het nog eens! 🔄',
-          threadId: input.threadId || 'error',
+          threadId: errorThreadId || '',
           error: error instanceof Error ? error.message : 'Unknown error',
         };
       }

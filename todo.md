@@ -231,3 +231,6 @@
 
 ## UI Fixes
 - [x] Gebruikersvragen (user messages) moeten zwarte tekst hebben in plaats van wit
+
+## Critical Database Bug
+- [x] ThreadId wordt opgeslagen als "error" in database i.p.v. echte thread ID, waardoor chat intermittent faalt (fixed error handling to create fallback thread)
