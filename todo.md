@@ -224,9 +224,10 @@
 - [x] Welcome pagina: grappige puber-afbeelding toevoegen (bovenaan, groot)
 - [x] Welcome pagina: info-kaarten naar beneden verplaatsen (onder afbeelding)
 
-## Critical Bugs
-- [ ] Chat geeft geen antwoord meer op berichten
-- [ ] Onboarding data (naam, leeftijd, postcode, geslacht) wordt niet opgeslagen - gebruiker moet iedere keer opnieuw invullen
+## Critical Bugs (Gespreksflow Testing)
+- [ ] Chat geeft geen antwoord meer op berichten (blijft leeg scherm)
+- [x] Onboarding data (naam, leeftijd, postcode, geslacht) blijft niet staan in localStorage na refresh (added ProtectedRoute guard)
+- [x] Welcome message moet variëren bij "Nieuw Gesprek" en naam uit profiel gebruiken (already implemented with random greetings/phrases/emojis)
 
 ## UI Fixes
 - [x] Gebruikersvragen (user messages) moeten zwarte tekst hebben in plaats van wit

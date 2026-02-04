@@ -4,6 +4,7 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Onboarding screens
 import Welcome from "./pages/onboarding/Welcome";
@@ -25,13 +26,22 @@ function Router() {
       <Route path="/onboarding/welcome" component={Welcome} />
       <Route path="/onboarding/account" component={Account} />
       
-      {/* Main app tabs */}
-      <Route path="/chat" component={Chat} />
-      <Route path="/history" component={History} />
-
-      <Route path="/actions" component={Actions} />
-      <Route path="/profile" component={Profile} />
-      <Route path="/parent-info" component={ParentInfo} />
+      {/* Main app tabs - protected */}
+      <Route path="/chat">
+        <ProtectedRoute><Chat /></ProtectedRoute>
+      </Route>
+      <Route path="/history">
+        <ProtectedRoute><History /></ProtectedRoute>
+      </Route>
+      <Route path="/actions">
+        <ProtectedRoute><Actions /></ProtectedRoute>
+      </Route>
+      <Route path="/profile">
+        <ProtectedRoute><Profile /></ProtectedRoute>
+      </Route>
+      <Route path="/parent-info">
+        <ProtectedRoute><ParentInfo /></ProtectedRoute>
+      </Route>
       
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
