@@ -241,3 +241,14 @@
 - [x] Migrate assistantRouter to direct Chat Completions API (bypassing SDK)
 - [x] Test with project-scoped API key (sk-proj-)
 - [x] Verify complete chat flow works with new implementation
+
+## Event-Tracking Implementation (Dashboard Integration)
+- [x] Read MATTI_WEB_DOCUMENTATION.md for event structure
+- [x] Create analytics API endpoint in server
+- [x] Create event sender utility function
+- [x] Implement SESSION_START event (chat initialization)
+- [x] Implement MESSAGE_SENT event (every user message)
+- [x] Implement RISK_DETECTED event (AI response handler)
+- [x] Implement SESSION_END event (chat close/timeout)
+- [x] Test events locally (vitest tests passing)
+- [ ] Verify events reach Dashboard (requires Dashboard endpoint fix)

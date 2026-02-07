@@ -4,6 +4,7 @@ import { ENV } from "./_core/env";
 import { readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+import { detectRisk, detectCrisisResponse } from "@shared/risk-detection";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -37,6 +38,9 @@ const chatRequestSchema = z.object({
 const chatResponseSchema = z.object({
   reply: z.string(),
   error: z.string().optional(),
+  riskDetected: z.boolean().optional(),
+  riskLevel: z.enum(['low', 'medium', 'high', 'critical']).optional(),
+  riskType: z.enum(['suicidality', 'self_harm', 'abuse', 'other']).optional(),
 });
 
 // Summarize request schema
@@ -130,9 +134,17 @@ export const assistantRouter = router({
         const reply = await callOpenAI(messages);
 
         console.log('[Assistant] Response received:', reply.substring(0, 100) + '...');
-
+        
+        // Check for risk in AI response
+        const riskDetection = detectRisk(reply);
+        const isCrisisResponse = detectCrisisResponse(reply);
+        
+        // Return risk detection info for frontend to track
         return {
           reply,
+          riskDetected: riskDetection?.detected || isCrisisResponse,
+          riskLevel: riskDetection?.level,
+          riskType: riskDetection?.type,
         };
       } catch (error) {
         console.error('[Assistant] Error:', error);

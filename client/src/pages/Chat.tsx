@@ -94,6 +94,32 @@ export default function Chat() {
   const updateSummary = trpc.chat.updateSummary.useMutation();
   const saveAction = trpc.action.saveAction.useMutation();
   const deleteConversation = trpc.chat.deleteConversation.useMutation();
+  
+  // Analytics tracking
+  const trackSessionStart = trpc.analytics.trackSessionStart.useMutation();
+  const trackMessageSent = trpc.analytics.trackMessageSent.useMutation();
+  const trackSessionEnd = trpc.analytics.trackSessionEnd.useMutation();
+  const trackRiskDetected = trpc.analytics.trackRiskDetected.useMutation();
+  
+  // Track session start when conversation is loaded
+  const [sessionStartTracked, setSessionStartTracked] = useState(false);
+  const [sessionStartTime, setSessionStartTime] = useState<number>(Date.now());
+  
+  useEffect(() => {
+    if (conversation && !sessionStartTracked && user) {
+      // Check if this is a new conversation (no messages yet)
+      const isNewConversation = !conversation.messages || conversation.messages.length === 0;
+      
+      trackSessionStart.mutate({
+        conversationId: conversation.id,
+        themeId: currentThemeId,
+        isNewUser: isNewConversation,
+      });
+      
+      setSessionStartTracked(true);
+      setSessionStartTime(Date.now());
+    }
+  }, [conversation, sessionStartTracked, user, currentThemeId]);
 
   const handleSendMessage = async () => {
     if (!inputText.trim() || !user) return;
@@ -117,6 +143,16 @@ export default function Chat() {
         role: "user",
         content: messageText,
       });
+      
+      // Track MESSAGE_SENT event
+      const currentMessageCount = messages.length + 1; // +1 for the message just sent
+      if (conversation) {
+        trackMessageSent.mutate({
+          conversationId: conversation.id,
+          themeId: currentThemeId,
+          messageCount: currentMessageCount,
+        });
+      }
 
       // Build context from summary + recent messages
       let context = "";
@@ -151,6 +187,18 @@ export default function Chat() {
         content: response.reply,
         threadId: conversation?.threadId || undefined,
       });
+      
+      // Track RISK_DETECTED if risk was found in response
+      if (response.riskDetected && response.riskLevel && response.riskType && conversation) {
+        trackRiskDetected.mutate({
+          conversationId: conversation.id,
+          riskLevel: response.riskLevel,
+          riskType: response.riskType,
+          actionTaken: "Crisis resources provided in chat response",
+          detectedText: response.reply.substring(0, 200), // First 200 chars for context
+        });
+        console.log(`[Analytics] RISK_DETECTED: ${response.riskLevel} - ${response.riskType}`);
+      }
 
       // Detect action in AI response
       const actionDetection = detectAction(response.reply);
@@ -238,8 +286,21 @@ export default function Chat() {
     if (!user) return;
 
     try {
+      // Track SESSION_END before starting new chat
+      if (conversation && sessionStartTracked) {
+        const durationSeconds = Math.floor((Date.now() - sessionStartTime) / 1000);
+        trackSessionEnd.mutate({
+          conversationId: conversation.id,
+          durationSeconds,
+          totalMessages: messages.length,
+        });
+      }
+      
       // Delete existing conversation (including conversationId)
       await deleteConversation.mutateAsync({ themeId: currentThemeId });
+      
+      // Reset session tracking for new conversation
+      setSessionStartTracked(false);
       
       // Refetch to create new empty conversation
       await refetchConversation();
