@@ -252,3 +252,9 @@
 - [x] Implement SESSION_END event (chat close/timeout)
 - [x] Test events locally (vitest tests passing)
 - [ ] Verify events reach Dashboard (requires Dashboard endpoint fix)
+
+## Dashboard API Key Configuration
+- [x] Add ANALYTICS_CONFIG with API key and endpoint to analyticsRouter.ts
+- [x] Update all fetch() calls to include X-API-Key header
+- [x] Test SESSION_START event with authentication (Dashboard sandbox in sleep mode)
+- [ ] Verify events reach Dashboard successfully (requires Dashboard to be active)

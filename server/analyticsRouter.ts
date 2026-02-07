@@ -5,8 +5,11 @@ import { getDb } from "./db";
 import { analytics } from "../drizzle/schema";
 import { eq, and } from "drizzle-orm";
 
-// Dashboard API endpoint (from task description)
-const DASHBOARD_API_URL = process.env.DASHBOARD_API_URL || "https://6000-xxjchzjnuwtphiqhjcgbt-9f2f415c.us1.manus.computer/api/events";
+// Dashboard API configuration
+const ANALYTICS_CONFIG = {
+  apiKey: 'ak_zy2wNbIDSOt9ahf4Huk1lfvie12eRn8WT7hD9VEbCgXWTnI8',
+  endpoint: 'https://3000-ig0nvibh1ceu0bbrvs201-3a22751a.us1.manus.computer/api/analytics/events'
+};
 
 /**
  * Event types that can be sent to Dashboard
@@ -28,10 +31,11 @@ const RiskType = z.enum(["suicidality", "self_harm", "abuse", "other"]);
  */
 async function sendEventToDashboard(eventType: string, eventData: any) {
   try {
-    const response = await fetch(DASHBOARD_API_URL, {
+    const response = await fetch(ANALYTICS_CONFIG.endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-API-Key": ANALYTICS_CONFIG.apiKey,
       },
       body: JSON.stringify({
         app_type: "matti",
