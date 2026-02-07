@@ -1,23 +1,29 @@
 import { z } from "zod";
 import { publicProcedure, router } from "./_core/trpc";
 import { ENV } from "./_core/env";
-import OpenAI from "openai";
+import { readFileSync } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /**
- * OpenAI Assistant Router
+ * OpenAI Chat Completions Router
  * 
- * Ported from original Matti mobile app
- * Integrates with trained OpenAI Assistant
+ * Direct API implementation (bypassing SDK) for compatibility with project-scoped keys
+ * Uses Chat Completions API instead of deprecated Assistants API
  */
 
-const openai = new OpenAI({
-  apiKey: ENV.openaiApiKey,
-});
+// Load Matti instructions from file
+const MATTI_INSTRUCTIONS = readFileSync(
+  join(__dirname, '..', 'matti-instructions.md'),
+  'utf-8'
+);
 
 // Request schema
 const chatRequestSchema = z.object({
   message: z.string().min(1).max(2000),
-  threadId: z.string().optional(),
   context: z.string().optional(), // Summary + recent messages
   themeId: z.string().optional(), // Theme ID for context
   userProfile: z.object({
@@ -30,13 +36,11 @@ const chatRequestSchema = z.object({
 // Response schema
 const chatResponseSchema = z.object({
   reply: z.string(),
-  threadId: z.string(),
   error: z.string().optional(),
 });
 
 // Summarize request schema
 const summarizeRequestSchema = z.object({
-  threadId: z.string(),
   prompt: z.string(),
 });
 
@@ -46,26 +50,43 @@ const summarizeResponseSchema = z.object({
   error: z.string().optional(),
 });
 
+/**
+ * Call OpenAI Chat Completions API directly
+ */
+async function callOpenAI(messages: Array<{ role: string; content: string }>, model = "gpt-4o", temperature = 0.8) {
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ENV.openaiApiKey}`,
+    },
+    body: JSON.stringify({
+      model,
+      messages,
+      temperature,
+      max_tokens: 1000,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`OpenAI API error: ${response.status} ${errorText}`);
+  }
+
+  const data = await response.json();
+  return data.choices[0]?.message?.content || '';
+}
+
 export const assistantRouter = router({
   /**
-   * Send a message to the assistant
+   * Send a message to Matti using Chat Completions API
    */
   send: publicProcedure
     .input(chatRequestSchema)
     .output(chatResponseSchema)
     .mutation(async ({ input }) => {
       try {
-        const { message, threadId, context, themeId, userProfile } = input;
-
-        // Create or use existing thread
-        let thread;
-        if (threadId) {
-          thread = { id: threadId };
-          console.log('[Assistant] Using existing thread:', threadId);
-        } else {
-          thread = await openai.beta.threads.create();
-          console.log('[Assistant] Created new thread:', thread.id);
-        }
+        const { message, context, themeId, userProfile } = input;
 
         // Build user context for empathymap
         let userContext = '';
@@ -77,75 +98,47 @@ export const assistantRouter = router({
                              userProfile.gender === 'girl' ? 'Meisje' :
                              userProfile.gender === 'other' ? 'Anders' : 'Niet opgegeven';
           
-          userContext = `[GEBRUIKER CONTEXT - BELANGRIJK VOOR EMPATHYMAP]\nNaam: ${userProfile.name}\nLeeftijd: ${userProfile.age} jaar (${ageGroup})\nGender: ${genderLabel}${themeId ? `\nHuidig thema: ${themeId}` : ''}\n\n`;
+          userContext = `\n\n[GEBRUIKER CONTEXT - BELANGRIJK VOOR EMPATHYMAP]\nNaam: ${userProfile.name}\nLeeftijd: ${userProfile.age} jaar (${ageGroup})\nGender: ${genderLabel}${themeId ? `\nHuidig thema: ${themeId}` : ''}`;
         }
 
-        // Add context + user context + user message to thread
-        const fullMessage = userContext + (context 
-          ? `${context}\n\n---\n\nGebruiker: ${message}`
-          : message);
+        // Build system message with Matti instructions + user context
+        const systemMessage = MATTI_INSTRUCTIONS + userContext;
 
-        await openai.beta.threads.messages.create(thread.id, {
-          role: "user",
-          content: fullMessage,
+        // Build messages array
+        const messages: Array<{ role: string; content: string }> = [
+          { role: 'system', content: systemMessage }
+        ];
+
+        // Add context if provided (summary + recent messages)
+        if (context) {
+          messages.push({
+            role: 'user',
+            content: `[GESPREKSGESCHIEDENIS]\n${context}\n\n---\n\n[NIEUW BERICHT]`
+          });
+        }
+
+        // Add current user message
+        messages.push({
+          role: 'user',
+          content: message
         });
 
-        console.log('[Assistant] Added message to thread');
+        console.log('[Assistant] Sending message to OpenAI Chat Completions API');
+        console.log('[Assistant] Messages count:', messages.length);
 
-        // Run the assistant
-        const run = await openai.beta.threads.runs.createAndPoll(thread.id, {
-          assistant_id: ENV.openaiAssistantId,
-        });
-
-        console.log('[Assistant] Run completed:', run.status);
-
-        if (run.status !== 'completed') {
-          throw new Error(`Run failed with status: ${run.status}`);
-        }
-
-        // Get assistant's response
-        const messages = await openai.beta.threads.messages.list(thread.id);
-        const lastMessage = messages.data[0];
-
-        if (!lastMessage || lastMessage.role !== 'assistant') {
-          throw new Error('No assistant response found');
-        }
-
-        // Extract text content
-        const textContent = lastMessage.content.find(c => c.type === 'text');
-        if (!textContent || textContent.type !== 'text') {
-          throw new Error('No text content in response');
-        }
-
-        const reply = textContent.text.value;
+        // Call OpenAI API directly
+        const reply = await callOpenAI(messages);
 
         console.log('[Assistant] Response received:', reply.substring(0, 100) + '...');
 
         return {
           reply,
-          threadId: thread.id,
         };
       } catch (error) {
         console.error('[Assistant] Error:', error);
         
-        // If there's an error and no existing threadId, create a new thread for next attempt
-        // This prevents saving 'error' as threadId in database
-        let errorThreadId = input.threadId;
-        if (!errorThreadId) {
-          try {
-            const newThread = await openai.beta.threads.create();
-            errorThreadId = newThread.id;
-            console.log('[Assistant] Created fallback thread after error:', errorThreadId);
-          } catch (threadError) {
-            console.error('[Assistant] Failed to create fallback thread:', threadError);
-            // If we can't create a thread, return empty string to force new thread on retry
-            errorThreadId = '';
-          }
-        }
-        
         return {
           reply: 'Sorry, er ging iets mis. Probeer het nog eens! 🔄',
-          threadId: errorThreadId || '',
           error: error instanceof Error ? error.message : 'Unknown error',
         };
       }
@@ -159,14 +152,13 @@ export const assistantRouter = router({
     .output(summarizeResponseSchema)
     .mutation(async ({ input }) => {
       try {
-        const { threadId, prompt } = input;
+        const { prompt } = input;
 
-        console.log('[Assistant] Generating summary for thread:', threadId);
+        console.log('[Assistant] Generating summary');
 
-        // Use OpenAI Chat Completions for summarization (cheaper than assistant)
-        const completion = await openai.chat.completions.create({
-          model: "gpt-4o-mini", // Cheaper model for summaries
-          messages: [
+        // Use cheaper model for summaries
+        const summary = await callOpenAI(
+          [
             {
               role: "system",
               content: "Je bent een behulpzame assistent die gesprekken samenvat in het Nederlands. Maak korte, bondige samenvattingen die de belangrijkste punten en gevoelens bevatten."
@@ -176,11 +168,9 @@ export const assistantRouter = router({
               content: prompt
             }
           ],
-          max_tokens: 150,
-          temperature: 0.5,
-        });
-
-        const summary = completion.choices[0]?.message?.content || '';
+          "gpt-4o-mini",
+          0.5
+        );
 
         console.log('[Assistant] Summary generated:', summary.substring(0, 100) + '...');
 
@@ -203,8 +193,8 @@ export const assistantRouter = router({
   health: publicProcedure.query(() => {
     return {
       status: 'ok',
-      assistantId: ENV.openaiAssistantId,
       hasApiKey: !!ENV.openaiApiKey,
+      apiType: 'chat-completions', // Direct API calls
     };
   }),
 });

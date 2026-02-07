@@ -133,7 +133,6 @@ export default function Chat() {
       // Send to OpenAI Assistant
       const response = await sendToAssistant.mutateAsync({
         message: messageText,
-        threadId: conversation?.threadId || undefined,
         context,
         themeId: currentThemeId,
         userProfile: user.age && user.gender && user.gender !== "none"
@@ -145,12 +144,12 @@ export default function Chat() {
           : undefined,
       });
 
-      // Save assistant response and threadId
+      // Save assistant response
       await saveMessage.mutateAsync({
         themeId: currentThemeId,
         role: "assistant",
         content: response.reply,
-        threadId: response.threadId,
+        threadId: conversation?.threadId || undefined,
       });
 
       // Detect action in AI response
@@ -188,7 +187,7 @@ export default function Chat() {
         }
       }
 
-      // Refresh conversation to get updated threadId
+      // Refresh conversation
       await refetchConversation();
 
       // Check if we need to summarize (every 10 messages)
@@ -206,7 +205,6 @@ export default function Chat() {
         
         try {
           const summaryResult = await summarize.mutateAsync({
-            threadId: response.threadId,
             prompt: summaryPrompt,
           });
           
@@ -240,7 +238,7 @@ export default function Chat() {
     if (!user) return;
 
     try {
-      // Delete existing conversation (including threadId)
+      // Delete existing conversation (including conversationId)
       await deleteConversation.mutateAsync({ themeId: currentThemeId });
       
       // Refetch to create new empty conversation

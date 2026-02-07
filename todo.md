@@ -234,3 +234,10 @@
 
 ## Critical Database Bug
 - [x] ThreadId wordt opgeslagen als "error" in database i.p.v. echte thread ID, waardoor chat intermittent faalt (fixed error handling to create fallback thread)
+
+## OpenAI API Migration (Project-Key Compatibility)
+- [x] Research new OpenAI API architecture (Responses/Conversations vs Assistants)
+- [x] Determine if Assistants API supports project-scoped keys or requires migration
+- [x] Migrate assistantRouter to direct Chat Completions API (bypassing SDK)
+- [x] Test with project-scoped API key (sk-proj-)
+- [x] Verify complete chat flow works with new implementation
