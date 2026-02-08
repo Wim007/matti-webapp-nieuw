@@ -44,9 +44,31 @@ const trpcClient = trpc.createClient({
       url: "/api/trpc",
       transformer: superjson,
       fetch(input, init) {
+        // Get Matti user profile from localStorage
+        const profileData = localStorage.getItem("matti_user_profile");
+        let headers: Record<string, string> = {};
+        
+        if (profileData) {
+          try {
+            const profile = JSON.parse(profileData);
+            headers = {
+              "X-Matti-User-Id": profile.id || "",
+              "X-Matti-User-Name": profile.name || "",
+              "X-Matti-User-Age": profile.age?.toString() || "",
+              "X-Matti-User-Gender": profile.gender || "none",
+            };
+          } catch (e) {
+            console.error("Failed to parse Matti user profile", e);
+          }
+        }
+        
         return globalThis.fetch(input, {
           ...(init ?? {}),
           credentials: "include",
+          headers: {
+            ...(init?.headers || {}),
+            ...headers,
+          },
         });
       },
     }),

@@ -258,3 +258,11 @@
 - [x] Update all fetch() calls to include X-API-Key header
 - [x] Test SESSION_START event with authentication (Dashboard sandbox in sleep mode)
 - [ ] Verify events reach Dashboard successfully (requires Dashboard to be active)
+
+## KRITIEKE BUGS - Sessie Persistentie & Geschiedenis
+- [x] Fix: Gebruikersgegevens worden niet bewaard (localStorage/sessie probleem)
+- [x] Fix: Onboarding wordt steeds opnieuw gevraagd bij navigatie
+- [x] Fix: Conversaties worden niet opgeslagen in database (mattiProcedure + userId varchar)
+- [x] Fix: Gespreksgeschiedenis toont geen conversaties
+- [x] Fix: Thema-detectie niet zichtbaar in geschiedenis
+- [ ] Test: Volledige flow van onboarding → chat → geschiedenis (browser test pending)

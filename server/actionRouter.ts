@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { protectedProcedure, router } from "./_core/trpc";
+import { router } from "./_core/trpc";
+import { mattiProcedure } from "./_core/mattiProcedure";
 import { getDb } from "./db";
 import { actions, followUps } from "../drizzle/schema";
 import { eq, and, desc } from "drizzle-orm";
@@ -34,7 +35,7 @@ export const actionRouter = router({
   /**
    * Save a detected action and schedule follow-ups
    */
-  saveAction: protectedProcedure
+  saveAction: mattiProcedure
     .input(z.object({
       themeId: themeIdEnum,
       actionText: z.string(),
@@ -96,7 +97,7 @@ export const actionRouter = router({
   /**
    * Get all actions for current user
    */
-  getActions: protectedProcedure
+  getActions: mattiProcedure
     .input(z.object({
       status: actionStatusEnum.optional(),
       themeId: themeIdEnum.optional(),
@@ -133,7 +134,7 @@ export const actionRouter = router({
   /**
    * Update action status (mark as completed/cancelled)
    */
-  updateActionStatus: protectedProcedure
+  updateActionStatus: mattiProcedure
     .input(z.object({
       actionId: z.number(),
       status: actionStatusEnum,
@@ -192,7 +193,7 @@ export const actionRouter = router({
   /**
    * Get action statistics
    */
-  getActionStats: protectedProcedure
+  getActionStats: mattiProcedure
     .query(async ({ ctx }) => {
       const db = await getDb();
       if (!db) {
@@ -225,7 +226,7 @@ export const actionRouter = router({
   /**
    * Get pending follow-ups (for notification system)
    */
-  getPendingFollowUps: protectedProcedure
+  getPendingFollowUps: mattiProcedure
     .query(async ({ ctx }) => {
       const db = await getDb();
       if (!db) {

@@ -32,7 +32,7 @@ export const users = mysqlTable("users", {
  */
 export const themes = mysqlTable("themes", {
   id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
+  userId: varchar("userId", { length: 255 }).notNull(),
   currentTheme: mysqlEnum("currentTheme", [
     "general",
     "school",
@@ -53,7 +53,7 @@ export const themes = mysqlTable("themes", {
  */
 export const conversations = mysqlTable("conversations", {
   id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
+  userId: varchar("userId", { length: 255 }).notNull(),
   themeId: mysqlEnum("themeId", [
     "general",
     "school",
@@ -81,7 +81,7 @@ export const conversations = mysqlTable("conversations", {
  */
 export const actions = mysqlTable("actions", {
   id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
+  userId: varchar("userId", { length: 255 }).notNull(),
   themeId: mysqlEnum("themeId", [
     "general",
     "school",

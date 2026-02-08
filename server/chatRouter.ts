@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { protectedProcedure, router } from "./_core/trpc";
+import { router } from "./_core/trpc";
+import { mattiProcedure } from "./_core/mattiProcedure";
 import { getDb } from "./db";
 import { conversations } from "../drizzle/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
@@ -27,7 +28,7 @@ export const chatRouter = router({
   /**
    * Get or create conversation for a theme
    */
-  getConversation: protectedProcedure
+  getConversation: mattiProcedure
     .input(z.object({
       themeId: themeIdEnum,
     }))
@@ -82,7 +83,7 @@ export const chatRouter = router({
   /**
    * Save message to conversation
    */
-  saveMessage: protectedProcedure
+  saveMessage: mattiProcedure
     .input(z.object({
       themeId: themeIdEnum,
       role: z.enum(["user", "assistant"]),
@@ -154,7 +155,7 @@ export const chatRouter = router({
   /**
    * Get all conversations for current user
    */
-  getAllConversations: protectedProcedure
+  getAllConversations: mattiProcedure
     .query(async ({ ctx }) => {
       const db = await getDb();
       if (!db) {
@@ -192,7 +193,7 @@ export const chatRouter = router({
   /**
    * Update conversation summary
    */
-  updateSummary: protectedProcedure
+  updateSummary: mattiProcedure
     .input(z.object({
       themeId: themeIdEnum,
       summary: z.string(),
@@ -225,7 +226,7 @@ export const chatRouter = router({
   /**
    * Delete conversation (for "Nieuw Gesprek" - creates fresh start)
    */
-  deleteConversation: protectedProcedure
+  deleteConversation: mattiProcedure
     .input(z.object({
       themeId: themeIdEnum,
     }))

@@ -16,10 +16,10 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     if (!profile) {
       // No profile found, redirect to welcome
       setLocation("/");
-    } else {
-      // Profile exists, allow access
-      setIsChecking(false);
     }
+    
+    // Always set isChecking to false after check
+    setIsChecking(false);
   }, [setLocation]);
 
   // Show nothing while checking (prevents flash of content)
