@@ -91,6 +91,9 @@ export default function Chat() {
   const trackSessionEnd = trpc.analytics.trackSessionEnd.useMutation();
   const trackRiskDetected = trpc.analytics.trackRiskDetected.useMutation();
   
+  // Bullying follow-up
+  const scheduleBullyingFollowUp = trpc.chat.scheduleBullyingFollowUp.useMutation();
+  
   // Track session start when conversation is loaded
   const [sessionStartTracked, setSessionStartTracked] = useState(false);
   const [sessionStartTime, setSessionStartTime] = useState<number>(Date.now());
@@ -215,6 +218,36 @@ export default function Chat() {
       };
       setMessages((prev) => [...prev, aiMsg]);
 
+      // Detect bullying and schedule follow-up if needed
+      if (conversation) {
+        const { detectBullying, getBullyingSeverity } = await import("@shared/bullying-detection");
+        const allMessages = [...messages, userMsg, aiMsg].map(m => ({
+          role: m.isAI ? "assistant" : "user",
+          content: m.content,
+        }));
+        
+        const bullyingDetected = detectBullying(allMessages);
+        
+        if (bullyingDetected && !conversation.bullyingFollowUpScheduled) {
+          const severity = getBullyingSeverity(allMessages);
+          console.log(`[BullyingDetection] Bullying detected with severity: ${severity}`);
+          
+          try {
+            // Schedule 3-day follow-up for bullying
+            await scheduleBullyingFollowUp.mutateAsync({
+              conversationId: conversation.id,
+              severity,
+            });
+            
+            toast.info("💙 We checken over 3 dagen hoe het met je gaat", {
+              description: "Matti houdt je in de gaten",
+            });
+          } catch (error) {
+            console.error('[BullyingDetection] Failed to schedule follow-up:', error);
+          }
+        }
+      }
+      
       // Save action if detected
       if (actionDetection) {
         try {

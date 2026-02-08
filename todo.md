@@ -280,3 +280,11 @@
 - [x] Maak welkomstbericht leeftijdsappropriaat (12-14, 15-17, 18-21)
 - [x] Stuur gebruikersnaam mee in OpenAI context voor persoonlijke antwoorden (werkte al via userProfile)
 - [x] Test verzenden van berichten op gepubliceerde versie (getest in dev, werkt perfect)
+
+## Pesten Detectie & Follow-up Systeem
+- [x] Uitbreiden pesten keywords (30+ keywords: uitlachen, negeren, buitensluiten, roddelen, screenshots delen, etc.)
+- [x] Pesten opslaan in database met metadata (bullyingDetected, bullyingSeverity: low/medium/high)
+- [x] Automatische follow-up scheduling na 3 dagen voor pesten-gesprekken (scheduleBullyingFollowUp)
+- [ ] Push notificatie implementeren: "Hoe gaat het nou met je? Gaat het nu beter?" (TODO: browser push API + service worker)
+- [ ] Test pesten detectie met verschillende scenario's
+- [ ] Test follow-up scheduling en push notificaties

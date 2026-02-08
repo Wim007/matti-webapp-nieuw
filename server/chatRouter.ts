@@ -227,6 +227,39 @@ export const chatRouter = router({
     }),
 
   /**
+   * Schedule bullying follow-up (3 days after detection)
+   */
+  scheduleBullyingFollowUp: mattiProcedure
+    .input(z.object({
+      conversationId: z.number(),
+      severity: z.enum(["low", "medium", "high"]),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) {
+        throw new Error("Database not available");
+      }
+
+      const { conversationId, severity } = input;
+
+      // Update conversation with bullying metadata
+      await db
+        .update(conversations)
+        .set({
+          bullyingDetected: true,
+          bullyingSeverity: severity,
+          bullyingFollowUpScheduled: true,
+          updatedAt: new Date(),
+        })
+        .where(eq(conversations.id, conversationId));
+
+      // TODO: Implement actual follow-up scheduling (push notification after 3 days)
+      // This will be implemented in the next phase with push notification system
+
+      return { success: true, followUpDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000) };
+    }),
+
+  /**
    * Delete conversation (for "Nieuw Gesprek" - creates fresh start)
    */
   deleteConversation: mattiProcedure

@@ -15,12 +15,28 @@ const THEME_PATTERNS: ThemeKeywords[] = [
   {
     theme: "friends",
     keywords: [
-      "vriend", "vrienden", "vriendin", "vriendschap", "ruzie", "pesten", "gepest",
-      "groepsdruk", "whatsapp", "groep", "groepje", "uitgelachen", "buitengesloten",
-      "roddel", "achter mijn rug", "vertrouwen", "verraden", "alleen", "niemand",
-      "cyberpesten", "online", "screenshots", "gemeen", "uitgemaakt"
+      "vriend", "vrienden", "vriendin", "vriendschap", "ruzie", 
+      // Pesten keywords (uitgebreid)
+      "pesten", "gepest", "pest", "pester", "pesters", "pestgedrag",
+      "cyberpesten", "online pesten", "digitaal pesten",
+      "uitlachen", "uitgelachen", "lachen om", "belachelijk maken",
+      "negeren", "genegeerd", "doen alsof ik lucht ben",
+      "buitensluiten", "buitengesloten", "niet meedoen", "niet uitgenodigd",
+      "roddelen", "roddel", "achter mijn rug", "praatjes", "geruchten",
+      "screenshots delen", "screenshot", "doorsturen", "foto's delen",
+      "groepsdruk", "whatsapp", "groep", "groepje", "groepschat", "uit de groep",
+      "gemeen", "gemene dingen", "gemeen doen", "rot doen",
+      "plagen", "geplaagd", "sarren", "treiteren", "treiteraar",
+      "schelden", "gescholden", "uitschelden", "scheldwoorden",
+      "bedreigen", "bedreigd", "bang maken", "intimideren",
+      "slaan", "schoppen", "duwen", "fysiek", "geweld",
+      "spullen pakken", "afpakken", "verstopt", "kapot maken",
+      "vertrouwen", "verraden", "verraad", "geheim doorverteld",
+      "alleen", "niemand", "eenzaam", "geen vrienden",
+      "niet durven", "bang op school", "niet naar school willen",
+      "uitgemaakt", "voor gek gezet", "vernederd", "beschaamd"
     ],
-    weight: 2,
+    weight: 3, // Higher weight for bullying detection
   },
   {
     theme: "school",

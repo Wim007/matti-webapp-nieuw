@@ -72,6 +72,9 @@ export const conversations = mysqlTable("conversations", {
     content: string;
     timestamp: string;
   }>>().notNull(), // Full message history as JSON
+  bullyingDetected: boolean("bullyingDetected").default(false).notNull(), // Bullying flag
+  bullyingSeverity: mysqlEnum("bullyingSeverity", ["low", "medium", "high"]), // Severity level
+  bullyingFollowUpScheduled: boolean("bullyingFollowUpScheduled").default(false).notNull(), // Follow-up scheduled
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
