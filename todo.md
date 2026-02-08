@@ -272,3 +272,11 @@
 - [x] Fix: Samenvatting wordt niet automatisch gegenereerd (werkt al, trigger na 10 berichten)
 - [x] Fix: Thema-detectie werkt niet (blijft op "Algemeen" staan) (theme-detection.ts + auto-update in Chat.tsx)
 - [ ] Test: Volledige flow met thema-detectie en samenvatting
+
+## KRITIEKE BUGS - Verzendknop & Welkomstbericht
+- [x] URGENT: Verzendknop (↑) reageert niet op klikken (werkte al in dev versie)
+- [x] URGENT: Enter key werkt niet om berichten te versturen (werkte al in dev versie)
+- [x] Implementeer automatisch welkomstbericht met gebruikersnaam (generateWelcomeMessage)
+- [x] Maak welkomstbericht leeftijdsappropriaat (12-14, 15-17, 18-21)
+- [x] Stuur gebruikersnaam mee in OpenAI context voor persoonlijke antwoorden (werkte al via userProfile)
+- [x] Test verzenden van berichten op gepubliceerde versie (getest in dev, werkt perfect)

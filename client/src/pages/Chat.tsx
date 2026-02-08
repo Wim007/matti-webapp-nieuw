@@ -4,6 +4,7 @@ import { trpc } from "@/lib/trpc";
 import { THEMES, type ThemeId, type ChatMessage } from "@shared/matti-types";
 import { useMattiTheme } from "@/contexts/MattiThemeContext";
 import { detectAction } from "@shared/action-detection";
+import { generateWelcomeMessage } from "@shared/welcome-message";
 import { toast } from "sonner";
 
 export default function Chat() {
@@ -31,7 +32,7 @@ export default function Chat() {
 
   // Load messages from conversation
   useEffect(() => {
-    if (conversation?.messages) {
+    if (conversation?.messages && Array.isArray(conversation.messages) && conversation.messages.length > 0) {
       const loadedMessages: ChatMessage[] = (conversation.messages as Array<{
         role: "user" | "assistant";
         content: string;
@@ -45,34 +46,23 @@ export default function Chat() {
       setMessages(loadedMessages);
     } else if (user) {
       // Show welcome message if no conversation exists
-      // Get name from localStorage profile (onboarding), not from Manus account
+      // Get name and age from localStorage profile (onboarding)
       const profileData = localStorage.getItem("matti_user_profile");
       let userName = "daar";
+      let userAge = 16; // default
       if (profileData) {
         try {
           const profile = JSON.parse(profileData);
           userName = profile.name || "daar";
+          userAge = profile.age || 16;
         } catch (e) {
           console.error("Failed to parse profile:", e);
         }
       }
 
-      const greetings = ["Hé", "Hey", "Yo"];
-      const phrases = [
-        "Chill dat je er bent!",
-        "Goed dat je er bent!",
-        "Leuk dat je er bent!",
-        "Wat fijn dat je er bent!",
-      ];
-      const emojis = ["👋", "✨", "😊", "💬", "🎯"];
-
-      const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
-      const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-      const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-
       const welcomeMsg: ChatMessage = {
         id: Date.now().toString(),
-        content: `${randomGreeting} ${userName}! ${randomPhrase} ${randomEmoji}\n\nWaar wil je het over hebben?`,
+        content: generateWelcomeMessage(userName, userAge),
         isAI: true,
         timestamp: new Date().toISOString(),
       };
