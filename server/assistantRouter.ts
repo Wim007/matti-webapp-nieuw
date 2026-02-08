@@ -5,6 +5,7 @@ import { readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { detectRisk, detectCrisisResponse } from "@shared/risk-detection";
+import { detectTheme } from "@shared/theme-detection";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -41,6 +42,7 @@ const chatResponseSchema = z.object({
   riskDetected: z.boolean().optional(),
   riskLevel: z.enum(['low', 'medium', 'high', 'critical']).optional(),
   riskType: z.enum(['suicidality', 'self_harm', 'abuse', 'other']).optional(),
+  detectedTheme: z.enum(['general', 'school', 'friends', 'home', 'feelings', 'love', 'freetime', 'future', 'self']).optional(),
 });
 
 // Summarize request schema
@@ -139,12 +141,19 @@ export const assistantRouter = router({
         const riskDetection = detectRisk(reply);
         const isCrisisResponse = detectCrisisResponse(reply);
         
-        // Return risk detection info for frontend to track
+        // Detect theme from conversation
+        const conversationMessages = messages.filter(m => m.role !== 'system');
+        const detectedTheme = detectTheme(conversationMessages);
+        
+        console.log('[Assistant] Detected theme:', detectedTheme);
+        
+        // Return risk detection info and detected theme for frontend to track
         return {
           reply,
           riskDetected: riskDetection?.detected || isCrisisResponse,
           riskLevel: riskDetection?.level,
           riskType: riskDetection?.type,
+          detectedTheme,
         };
       } catch (error) {
         console.error('[Assistant] Error:', error);

@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 export default function Chat() {
   const { user } = useAuth();
-  const { currentThemeId } = useMattiTheme();
+  const { currentThemeId, setCurrentThemeId } = useMattiTheme();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -187,6 +187,19 @@ export default function Chat() {
         content: response.reply,
         threadId: conversation?.threadId || undefined,
       });
+      
+      // Update theme if detected theme is different and not "general"
+      if (response.detectedTheme && response.detectedTheme !== "general" && response.detectedTheme !== currentThemeId) {
+        console.log(`[ThemeDetection] Updating theme from ${currentThemeId} to ${response.detectedTheme}`);
+        setCurrentThemeId(response.detectedTheme);
+        // Show toast notification
+        const newTheme = THEMES.find(t => t.id === response.detectedTheme);
+        if (newTheme) {
+          toast.info(`${newTheme.emoji} Thema gewijzigd naar "${newTheme.name}"`, {
+            description: "Matti heeft het gespreksonderwerp herkend",
+          });
+        }
+      }
       
       // Track RISK_DETECTED if risk was found in response
       if (response.riskDetected && response.riskLevel && response.riskType && conversation) {

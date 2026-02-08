@@ -169,6 +169,7 @@ export const chatRouter = router({
           id: conversations.id,
           themeId: conversations.themeId,
           summary: conversations.summary,
+          messages: conversations.messages,
           updatedAt: conversations.updatedAt,
           createdAt: conversations.createdAt,
         })
@@ -177,15 +178,17 @@ export const chatRouter = router({
         .orderBy(desc(conversations.updatedAt));
 
       // Count messages for each conversation
-      const withCounts = await Promise.all(
-        convos.map(async (convo) => {
-          const messageCount = (convo as any).messages?.length || 0;
-          return {
-            ...convo,
-            messageCount,
-          };
-        })
-      );
+      const withCounts = convos.map((convo) => {
+        const messageCount = (convo.messages as Array<any>)?.length || 0;
+        return {
+          id: convo.id,
+          themeId: convo.themeId,
+          summary: convo.summary,
+          updatedAt: convo.updatedAt,
+          createdAt: convo.createdAt,
+          messageCount,
+        };
+      });
 
       return withCounts;
     }),

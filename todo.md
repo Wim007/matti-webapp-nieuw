@@ -266,3 +266,9 @@
 - [x] Fix: Gespreksgeschiedenis toont geen conversaties
 - [x] Fix: Thema-detectie niet zichtbaar in geschiedenis
 - [ ] Test: Volledige flow van onboarding → chat → geschiedenis (browser test pending)
+
+## BUGS - Geschiedenis & Thema-detectie
+- [x] Fix: Bericht-teller toont "0 berichten" terwijl er wel berichten zijn (messages field toegevoegd aan query)
+- [x] Fix: Samenvatting wordt niet automatisch gegenereerd (werkt al, trigger na 10 berichten)
+- [x] Fix: Thema-detectie werkt niet (blijft op "Algemeen" staan) (theme-detection.ts + auto-update in Chat.tsx)
+- [ ] Test: Volledige flow met thema-detectie en samenvatting
