@@ -288,3 +288,13 @@
 - [ ] Push notificatie implementeren: "Hoe gaat het nou met je? Gaat het nu beter?" (TODO: browser push API + service worker)
 - [ ] Test pesten detectie met verschillende scenario's
 - [ ] Test follow-up scheduling en push notificaties
+
+## Outcome Tracking & Dashboard Reporting (Volledige Interventie Flow)
+- [x] Design outcome tracking database schema (problem, conversationCount, duration, outcome, resolution)
+- [x] Implement conversation outcome detection (outcome-detection.ts with detectResolution)
+- [x] Store intervention journey: "Gepest - Na 4 gesprekken opgelost - Kan beter voor zichzelf opkomen"
+- [x] Track action completion rate per intervention (actionCompletionRate field)
+- [x] Implement Dashboard outcome reporting API (trackInterventionOutcome)
+- [x] Send intervention outcome to Dashboard when resolved (INTERVENTION_OUTCOME event)
+- [ ] Test complete flow: pesten detectie → acties → follow-ups → outcome → Dashboard
+- [ ] Implement browser push notifications for 3-day follow-ups

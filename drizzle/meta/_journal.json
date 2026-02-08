@@ -43,6 +43,13 @@
       "when": 1770566324047,
       "tag": "0005_nebulous_mariko_yashida",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1770567080129,
+      "tag": "0006_new_goblin_queen",
+      "breakpoints": true
     }
   ]
 }

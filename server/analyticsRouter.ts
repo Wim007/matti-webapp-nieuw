@@ -14,7 +14,7 @@ const ANALYTICS_CONFIG = {
 /**
  * Event types that can be sent to Dashboard
  */
-const EventType = z.enum(["SESSION_START", "MESSAGE_SENT", "RISK_DETECTED", "SESSION_END"]);
+const EventType = z.enum(["SESSION_START", "MESSAGE_SENT", "RISK_DETECTED", "SESSION_END", "INTERVENTION_OUTCOME"]);
 
 /**
  * Risk levels for RISK_DETECTED events
@@ -265,6 +265,53 @@ export const analyticsRouter = router({
       } catch (error) {
         console.error("[Analytics] Failed to update session end:", error);
       }
+
+      return { success: true };
+    }),
+
+  /**
+   * Track INTERVENTION_OUTCOME event
+   * Triggered when a problem intervention is resolved
+   */
+  trackInterventionOutcome: protectedProcedure
+    .input(
+      z.object({
+        conversationId: z.number(),
+        initialProblem: z.string(),
+        conversationCount: z.number(),
+        durationDays: z.number(),
+        outcome: z.enum(["unresolved", "in_progress", "resolved", "escalated"]),
+        resolution: z.string().optional(),
+        actionCompletionRate: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { user } = ctx;
+      const {
+        conversationId,
+        initialProblem,
+        conversationCount,
+        durationDays,
+        outcome,
+        resolution,
+        actionCompletionRate,
+      } = input;
+
+      const eventData = {
+        userId: user.id,
+        sessionId: conversationId,
+        initial_problem: initialProblem,
+        conversation_count: conversationCount,
+        duration_days: durationDays,
+        outcome,
+        resolution: resolution || "",
+        action_completion_rate: actionCompletionRate,
+      };
+
+      // Send to Dashboard
+      await sendEventToDashboard("INTERVENTION_OUTCOME", eventData);
+
+      console.log(`[Analytics] INTERVENTION_OUTCOME: ${initialProblem} - ${outcome} for user ${user.id}`);
 
       return { success: true };
     }),

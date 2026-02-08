@@ -75,6 +75,14 @@ export const conversations = mysqlTable("conversations", {
   bullyingDetected: boolean("bullyingDetected").default(false).notNull(), // Bullying flag
   bullyingSeverity: mysqlEnum("bullyingSeverity", ["low", "medium", "high"]), // Severity level
   bullyingFollowUpScheduled: boolean("bullyingFollowUpScheduled").default(false).notNull(), // Follow-up scheduled
+  // Outcome tracking fields
+  initialProblem: text("initialProblem"), // e.g., "Gepest door klasgenoten"
+  conversationCount: int("conversationCount").default(0).notNull(), // Number of follow-up conversations
+  interventionStartDate: timestamp("interventionStartDate"), // When problem was first detected
+  interventionEndDate: timestamp("interventionEndDate"), // When problem was resolved
+  outcome: mysqlEnum("outcome", ["unresolved", "in_progress", "resolved", "escalated"]).default("in_progress"), // Current status
+  resolution: text("resolution"), // e.g., "Kan nu beter voor zichzelf opkomen"
+  actionCompletionRate: int("actionCompletionRate").default(0).notNull(), // Percentage of actions completed (0-100)
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

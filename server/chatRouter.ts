@@ -260,6 +260,105 @@ export const chatRouter = router({
     }),
 
   /**
+   * Update conversation outcome (when problem is resolved)
+   */
+  updateOutcome: mattiProcedure
+    .input(z.object({
+      conversationId: z.number(),
+      outcome: z.enum(["unresolved", "in_progress", "resolved", "escalated"]),
+      resolution: z.string().optional(),
+      actionCompletionRate: z.number().optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) {
+        throw new Error("Database not available");
+      }
+
+      const { conversationId, outcome, resolution, actionCompletionRate } = input;
+
+      const updateData: any = {
+        outcome,
+        updatedAt: new Date(),
+      };
+
+      if (resolution) {
+        updateData.resolution = resolution;
+      }
+
+      if (actionCompletionRate !== undefined) {
+        updateData.actionCompletionRate = actionCompletionRate;
+      }
+
+      if (outcome === "resolved") {
+        updateData.interventionEndDate = new Date();
+      }
+
+      await db
+        .update(conversations)
+        .set(updateData)
+        .where(eq(conversations.id, conversationId));
+
+      return { success: true };
+    }),
+
+  /**
+   * Initialize intervention (when problem is first detected)
+   */
+  initializeIntervention: mattiProcedure
+    .input(z.object({
+      conversationId: z.number(),
+      initialProblem: z.string(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) {
+        throw new Error("Database not available");
+      }
+
+      const { conversationId, initialProblem } = input;
+
+      await db
+        .update(conversations)
+        .set({
+          initialProblem,
+          interventionStartDate: new Date(),
+          outcome: "in_progress",
+          conversationCount: 1,
+          updatedAt: new Date(),
+        })
+        .where(eq(conversations.id, conversationId));
+
+      return { success: true };
+    }),
+
+  /**
+   * Increment conversation count (for follow-ups)
+   */
+  incrementConversationCount: mattiProcedure
+    .input(z.object({
+      conversationId: z.number(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) {
+        throw new Error("Database not available");
+      }
+
+      const { conversationId } = input;
+
+      await db
+        .update(conversations)
+        .set({
+          conversationCount: sql`${conversations.conversationCount} + 1`,
+          updatedAt: new Date(),
+        })
+        .where(eq(conversations.id, conversationId));
+
+      return { success: true };
+    }),
+
+  /**
    * Delete conversation (for "Nieuw Gesprek" - creates fresh start)
    */
   deleteConversation: mattiProcedure
