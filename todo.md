@@ -298,3 +298,40 @@
 - [x] Send intervention outcome to Dashboard when resolved (INTERVENTION_OUTCOME event)
 - [ ] Test complete flow: pesten detectie → acties → follow-ups → outcome → Dashboard
 - [ ] Implement browser push notifications for 3-day follow-ups
+
+## Interventie Flow Uitbreiden Naar Alle 9 Thema's
+- [x] School: keywords (faalangst, tentamens, huiswerk, concentratie), severity detection, interventie-aanpak
+- [x] Vrienden: keywords (ruzie, buitengesloten, vriendschap, vertrouwen), severity detection, interventie-aanpak
+- [x] Thuis: keywords (ouders, ruzie thuis, scheiding, gezin), severity detection, interventie-aanpak
+- [x] Gevoelens: keywords (angst, depressie, stress, somber, eenzaam), severity detection, interventie-aanpak
+- [x] Liefde: keywords (verkering, heartbreak, verliefd, relatie), severity detection, interventie-aanpak
+- [x] Vrije tijd: keywords (verveling, niks te doen, hobby, vrienden), severity detection, interventie-aanpak
+- [x] Toekomst: keywords (zorgen, onzekerheid, studie, baan), severity detection, interventie-aanpak
+- [x] Jezelf: keywords (zelfbeeld, identiteit, uiterlijk, onzeker), severity detection, interventie-aanpak
+- [x] Algemeen: catch-all voor overige problemen
+- [x] Geïntegreerd in Chat.tsx en assistantRouter.ts
+
+## Re-usable Skill Maken
+- [ ] Documenteer interventie flow als skill met /skill-creator
+- [ ] Beschrijf thema detectie, severity levels, follow-up timing
+- [ ] Voeg voorbeelden toe voor elk thema
+
+## Browser Push Notifications
+- [ ] Implementeer Web Push API integratie
+- [ ] Creëer service worker voor background notifications
+- [ ] Implementeer notification permission flow
+- [ ] Test 3-daagse follow-up notificaties
+
+## Sentiment Analyse
+- [ ] Creëer sentiment detection utility (angstig/boos/verdrietig/blij/neutraal)
+- [ ] Integreer sentiment analyse in message flow
+- [ ] Gebruik sentiment voor interventie timing (urgent bij angstig/verdrietig)
+- [ ] Rapporteer sentiment trends naar Dashboard
+
+## End-to-End Testing Alle Thema's
+- [ ] Test School interventie flow (faalangst scenario)
+- [ ] Test Vrienden interventie flow (pesten scenario - al getest)
+- [ ] Test Thuis interventie flow (ruzie ouders scenario)
+- [ ] Test Gevoelens interventie flow (angst scenario)
+- [ ] Test Liefde interventie flow (heartbreak scenario)
+- [ ] Verifieer Dashboard rapportage voor alle thema's

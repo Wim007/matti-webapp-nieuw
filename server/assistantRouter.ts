@@ -5,7 +5,7 @@ import { readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { detectRisk, detectCrisisResponse } from "@shared/risk-detection";
-import { detectTheme } from "@shared/theme-detection";
+import { detectTheme } from "@shared/theme-detection-comprehensive";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -143,7 +143,9 @@ export const assistantRouter = router({
         
         // Detect theme from conversation
         const conversationMessages = messages.filter(m => m.role !== 'system');
-        const detectedTheme = detectTheme(conversationMessages);
+        // Detect theme from user message content
+        const themeDetection = detectTheme(input.message);
+        const detectedTheme = themeDetection.theme;
         
         console.log('[Assistant] Detected theme:', detectedTheme);
         

@@ -91,8 +91,9 @@ export default function Chat() {
   const trackSessionEnd = trpc.analytics.trackSessionEnd.useMutation();
   const trackRiskDetected = trpc.analytics.trackRiskDetected.useMutation();
   
-  // Bullying follow-up
+  // Intervention tracking
   const scheduleBullyingFollowUp = trpc.chat.scheduleBullyingFollowUp.useMutation();
+  const initializeIntervention = trpc.chat.initializeIntervention.useMutation();
   
   // Track session start when conversation is loaded
   const [sessionStartTracked, setSessionStartTracked] = useState(false);
@@ -218,32 +219,42 @@ export default function Chat() {
       };
       setMessages((prev) => [...prev, aiMsg]);
 
-      // Detect bullying and schedule follow-up if needed
+      // Detect theme and schedule follow-up if intervention is needed
       if (conversation) {
-        const { detectBullying, getBullyingSeverity } = await import("@shared/bullying-detection");
+        const { detectTheme, getInterventionApproach } = await import("@shared/theme-detection-comprehensive");
         const allMessages = [...messages, userMsg, aiMsg].map(m => ({
           role: m.isAI ? "assistant" : "user",
           content: m.content,
         }));
         
-        const bullyingDetected = detectBullying(allMessages);
+        // Detect theme from latest user message
+        const themeDetection = detectTheme(messageText);
         
-        if (bullyingDetected && !conversation.bullyingFollowUpScheduled) {
-          const severity = getBullyingSeverity(allMessages);
-          console.log(`[BullyingDetection] Bullying detected with severity: ${severity}`);
+        if (themeDetection.requiresIntervention && !conversation.bullyingFollowUpScheduled) {
+          const approach = getInterventionApproach(themeDetection.theme, themeDetection.severity);
+          console.log(`[ThemeDetection] Intervention required for ${themeDetection.theme} with severity: ${themeDetection.severity}`);
           
           try {
-            // Schedule 3-day follow-up for bullying
+            // Initialize intervention if not already started
+            if (!conversation.initialProblem) {
+              await initializeIntervention.mutateAsync({
+                conversationId: conversation.id,
+                initialProblem: `${THEMES.find(t => t.id === themeDetection.theme)?.name || themeDetection.theme} - ${themeDetection.keywords.slice(0, 3).join(", ")}`,
+              });
+            }
+            
+            // Schedule follow-up based on theme approach (map critical to high for API)
             await scheduleBullyingFollowUp.mutateAsync({
               conversationId: conversation.id,
-              severity,
+              severity: themeDetection.severity === "critical" ? "high" : themeDetection.severity as "low" | "medium" | "high",
             });
             
-            toast.info("💙 We checken over 3 dagen hoe het met je gaat", {
-              description: "Matti houdt je in de gaten",
+            const themeName = THEMES.find(t => t.id === themeDetection.theme)?.name || "dit onderwerp";
+            toast.info(`💙 We checken over ${approach.followUpDays} dagen hoe het met je gaat`, {
+              description: `Matti houdt ${themeName} in de gaten`,
             });
           } catch (error) {
-            console.error('[BullyingDetection] Failed to schedule follow-up:', error);
+            console.error('[ThemeDetection] Failed to schedule follow-up:', error);
           }
         }
       }
