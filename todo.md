@@ -335,3 +335,7 @@
 - [ ] Test Gevoelens interventie flow (angst scenario)
 - [ ] Test Liefde interventie flow (heartbreak scenario)
 - [ ] Verifieer Dashboard rapportage voor alle thema's
+
+## UI Styling Aanpassingen
+- [x] Welcome pagina achtergrondkleur aanpassen naar lichtgroen (zoals Account pagina)
+- [x] Afbeelding op Welcome pagina volledig rond maken (zwarte vierkant verwijderen)

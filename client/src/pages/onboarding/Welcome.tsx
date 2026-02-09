@@ -4,9 +4,9 @@ export default function Welcome() {
   const [, setLocation] = useLocation();
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6">
+    <div className="min-h-screen flex items-center justify-center p-6" style={{backgroundColor: '#aaf2f3'}}>
       <div className="max-w-2xl w-full">
-        <div className="flex flex-col gap-8" style={{backgroundColor: '#c7b8ff'}}>
+        <div className="flex flex-col gap-8">
           {/* Header */}
           <div className="flex flex-col items-center gap-4">
             <div className="text-5xl">👋</div>
@@ -20,7 +20,7 @@ export default function Welcome() {
             <img 
               src="https://files.manuscdn.com/user_upload_by_module/session_file/310419663030245921/idHgRDPaipBPClXU.jpg" 
               alt="Puber met puistjes kijkt geschrokken in de spiegel" 
-              className="w-64 h-64 object-cover rounded-3xl shadow-lg"
+              className="w-64 h-64 object-cover rounded-full shadow-lg"
             />
           </div>
 
