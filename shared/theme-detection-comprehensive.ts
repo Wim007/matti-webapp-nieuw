@@ -41,7 +41,7 @@ const THEME_KEYWORDS = {
       "te veel", "lukt niet", "snap het niet", "kan het niet",
       "te moeilijk", "stress", "druk", "overweldigd",
     ],
-    weight: 1.2,
+    weight: 2.0,
   },
   friends: {
     keywords: [
