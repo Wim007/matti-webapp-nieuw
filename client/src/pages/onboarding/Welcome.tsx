@@ -25,71 +25,49 @@ export default function Welcome() {
           </div>
 
           {/* Main Content */}
-          <div className="flex flex-col gap-6">
-            {/* Description */}
-            <p className="text-base leading-relaxed text-[#333] text-center">
-              Matti is een AI chatbuddy voor jongeren van 12-21 jaar. Matti
-              luistert, geeft tips en helpt je met school, vrienden, gevoelens
-              en meer.
-            </p>
-
-            {/* Features */}
-            <div className="flex flex-col gap-5">
-              {/* Privacy */}
-              <div className="bg-[#f0f9ff] p-5 rounded-2xl border-l-4 border-[#3b82f6]">
-                <div className="flex gap-3 mb-2">
-                  <span className="text-2xl">🔒</span>
-                  <h3 className="text-lg font-bold text-foreground">
-                    Veilig & Privé
-                  </h3>
-                </div>
-                <p className="text-sm leading-relaxed text-[#555]">
-                  Alle gesprekken zijn privé en worden alleen op jouw telefoon
-                  opgeslagen. Niemand anders kan ze zien.
+          <div className="w-full bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/50">
+            <div className="space-y-6 text-gray-800">
+              <div>
+                <h3 className="text-xl font-bold text-[#7cd5f3] mb-3 flex items-center gap-2">
+                  <span>💬</span> Wat doet Matti?
+                </h3>
+                <p className="text-base leading-relaxed">
+                  Matti is een AI chatbuddy speciaal voor jongeren. Je kunt met Matti praten over alles wat je bezighoudt, 
+                  zonder oordeel. Matti luistert, geeft tips en helpt je stappen te zetten.
                 </p>
               </div>
 
-              {/* Data */}
-              <div className="bg-[#f0fdf4] p-5 rounded-2xl border-l-4 border-[#22c55e]">
-                <div className="flex gap-3 mb-2">
-                  <span className="text-2xl">📊</span>
-                  <h3 className="text-lg font-bold text-foreground">
-                    Anonieme Gegevens
-                  </h3>
-                </div>
-                <p className="text-sm leading-relaxed text-[#555]">
-                  We gebruiken alleen leeftijd en postcode (anoniem) voor
-                  onderzoek. Geen namen, geen persoonlijke info.
+              <div>
+                <h3 className="text-xl font-bold text-[#7cd5f3] mb-3 flex items-center gap-2">
+                  <span>👥</span> Voor wie is Matti?
+                </h3>
+                <p className="text-base leading-relaxed">
+                  Matti is er voor jongeren tussen 12 en 21 jaar. Of je nou 13 bent of 20, Matti snapt waar je doorheen gaat 
+                  en past zich aan jouw leeftijd aan.
                 </p>
               </div>
 
-              {/* Action */}
-              <div className="bg-[#fef3f2] p-5 rounded-2xl border-l-4 border-[#ef4444]">
-                <div className="flex gap-3 mb-2">
-                  <span className="text-2xl">💪</span>
-                  <h3 className="text-lg font-bold text-foreground">
-                    Motivatie tot Actie
-                  </h3>
+              <div>
+                <h3 className="text-xl font-bold text-[#7cd5f3] mb-3 flex items-center gap-2">
+                  <span>🗨️</span> Waarover kun je praten?
+                </h3>
+                <div className="text-base leading-relaxed space-y-1">
+                  <p><span className="font-semibold text-[#3b82f6]">🏫 School:</span> Faalangst, tentamens, concentratie, huiswerk</p>
+                  <p><span className="font-semibold text-[#10b981]">👫 Vrienden:</span> Ruzie, pesten, vriendschap, vertrouwen</p>
+                  <p><span className="font-semibold text-[#f97316]">🏠 Thuis:</span> Ouders, gezin, scheiding, ruzie</p>
+                  <p><span className="font-semibold text-[#ec4899]">💖 Gevoelens:</span> Angst, stress, somberheid, eenzaamheid</p>
+                  <p><span className="font-semibold text-[#ef4444]">❤️ Liefde:</span> Relaties, heartbreak, verliefdheid</p>
+                  <p><span className="font-semibold text-[#8b5cf6]">✨ En meer:</span> Vrije tijd, toekomst, jezelf</p>
                 </div>
-                <p className="text-sm leading-relaxed text-[#555]">
-                  Matti helpt je niet alleen met praten, maar ook met concrete
-                  acties en volgt op na een paar dagen.
-                </p>
               </div>
 
-              {/* Theme Storage */}
-              <div className="bg-[#faf5ff] p-5 rounded-2xl border-l-4 border-[#a855f7]">
-                <div className="flex gap-3 mb-2">
-                  <span className="text-2xl">💬</span>
-                  <h3 className="text-lg font-bold text-foreground">
-                    9 Verschillende Thema's
-                  </h3>
-                </div>
-                <p className="text-sm leading-relaxed text-[#555]">
-                  Praat over School, Vrienden, Thuis, Gevoelens, Liefde, Vrije
-                  Tijd, Toekomst, Jezelf of gewoon kletsen. Elk gesprek wordt
-                  per thema opgeslagen op jouw telefoon, zodat Matti zich
-                  herinnert wat je eerder vertelde.
+              <div>
+                <h3 className="text-xl font-bold text-[#7cd5f3] mb-3 flex items-center gap-2">
+                  <span>✨</span> Hoe helpt Matti?
+                </h3>
+                <p className="text-base leading-relaxed">
+                  Matti luistert zonder oordeel, stelt vragen om je te helpen nadenken, geeft praktische tips en acties, 
+                  en checkt later hoe het met je gaat. <span className="font-semibold">🔒 Alles wat je vertelt blijft privé.</span>
                 </p>
               </div>
             </div>

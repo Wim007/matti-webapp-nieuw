@@ -340,6 +340,14 @@
 - [x] Welcome pagina achtergrondkleur aanpassen naar lichtgroen (zoals Account pagina)
 - [x] Afbeelding op Welcome pagina volledig rond maken (zwarte vierkant verwijderen)
 
+## Welcome Pagina Redesign
+- [x] Verwijder info-kaarten (Veilig & Privé, Anonieme Gegevens)
+- [x] Voeg directe tekst toe: Wat doet Matti? (AI chatbuddy voor jongeren)
+- [x] Voeg directe tekst toe: Voor wie is Matti? (12-21 jaar)
+- [x] Voeg directe tekst toe: Onderwerpen (school, vrienden, thuis, gevoelens, liefde, etc.)
+- [x] Voeg directe tekst toe: Hoe helpt Matti? (luisteren, tips, acties)
+- [x] Maak het één vloeiend geheel in plaats van losse kaarten
+
 ## KRITIEKE BUG - Thread Persistentie (OPGELOST)
 - [x] URGENT: Chat reset automatisch na 5-10 seconden (alle berichten verdwijnen)
 - [x] URGENT: Thread springt terug naar nieuw openingsbericht zonder gebruikersactie
