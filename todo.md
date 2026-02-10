@@ -348,6 +348,15 @@
 - [x] Voeg directe tekst toe: Hoe helpt Matti? (luisteren, tips, acties)
 - [x] Maak het één vloeiend geheel in plaats van losse kaarten
 
+## System Prompt Update - ACTION Format
+- [x] Voeg [ACTION: tekst] format instructie toe aan system prompt
+- [x] Voeg voorbeelden toe voor verschillende scenario's (pesten, faalangst, ruzie, etc.)
+- [x] Definieer wanneer WEL en wanneer NIET een actie te geven
+- [x] Specificeer dat acties specifiek, haalbaar en tijdgebonden moeten zijn
+- [x] Test actie-detectie met sample gesprekken
+- [ ] PROBLEEM: Matti gebruikt nog steeds NIET het [ACTION: ...] format in responses
+- [ ] OPLOSSING NODIG: Overweeg post-processing of alternatieve detectie methode
+
 ## KRITIEKE BUG - Thread Persistentie (OPGELOST)
 - [x] URGENT: Chat reset automatisch na 5-10 seconden (alle berichten verdwijnen)
 - [x] URGENT: Thread springt terug naar nieuw openingsbericht zonder gebruikersactie
