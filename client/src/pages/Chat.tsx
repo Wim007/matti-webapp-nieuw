@@ -3,7 +3,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { THEMES, type ThemeId, type ChatMessage } from "@shared/matti-types";
 import { useMattiTheme } from "@/contexts/MattiThemeContext";
-import { detectAction } from "@shared/action-detection";
+import { detectAction, detectActionIntelligent } from "@shared/action-detection";
 import { generateWelcomeMessage } from "@shared/welcome-message";
 import { toast } from "sonner";
 
@@ -236,8 +236,8 @@ export default function Chat() {
         console.log(`[Analytics] RISK_DETECTED: ${response.riskLevel} - ${response.riskType}`);
       }
 
-      // Detect action in AI response
-      const actionDetection = detectAction(response.reply);
+      // Detect action in AI response (intelligent post-processing)
+      const actionDetection = detectActionIntelligent(response.reply);
       
       // Add assistant response to UI (with clean response if action detected)
       const aiMsg: ChatMessage = {

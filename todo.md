@@ -362,6 +362,12 @@
 - [x] Display mode en border styling aangepast
 - [x] Tekst achtergrondkleur aangepast (crème en lichtgroen)
 
+## Nieuwe Implementaties
+- [x] Test chat styling met beide user/AI berichten (crème vs lichtgroen)
+- [x] Implementeer ACTION post-processing (automatische detectie concrete adviezen)
+- [x] Voeg typing indicator animatie toe ("Matti is aan het typen..." met animated dots)
+- [x] Uitgebreide patronen toegevoegd voor indirecte adviezen ("kun je contact opnemen met...", "het kan helpen om...")
+
 ## KRITIEKE BUG - Thread Persistentie (OPGELOST)
 - [x] URGENT: Chat reset automatisch na 5-10 seconden (alle berichten verdwijnen)
 - [x] URGENT: Thread springt terug naar nieuw openingsbericht zonder gebruikersactie
