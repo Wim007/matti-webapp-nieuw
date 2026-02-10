@@ -85,7 +85,7 @@ export const chatRouter = router({
    */
   saveMessage: mattiProcedure
     .input(z.object({
-      themeId: themeIdEnum,
+      conversationId: z.number(),
       role: z.enum(["user", "assistant"]),
       content: z.string(),
       threadId: z.string().optional(),
@@ -97,16 +97,16 @@ export const chatRouter = router({
       }
 
       const userId = ctx.user.id;
-      const { themeId, role, content, threadId } = input;
+      const { conversationId, role, content, threadId } = input;
 
-      // Get existing conversation
+      // Get existing conversation by ID (ensures stability across theme changes)
       const existing = await db
         .select()
         .from(conversations)
         .where(
           and(
             eq(conversations.userId, userId),
-            eq(conversations.themeId, themeId as ThemeId)
+            eq(conversations.id, conversationId)
           )
         )
         .limit(1);

@@ -339,3 +339,13 @@
 ## UI Styling Aanpassingen
 - [x] Welcome pagina achtergrondkleur aanpassen naar lichtgroen (zoals Account pagina)
 - [x] Afbeelding op Welcome pagina volledig rond maken (zwarte vierkant verwijderen)
+
+## KRITIEKE BUG - Thread Persistentie (OPGELOST)
+- [x] URGENT: Chat reset automatisch na 5-10 seconden (alle berichten verdwijnen)
+- [x] URGENT: Thread springt terug naar nieuw openingsbericht zonder gebruikersactie
+- [x] URGENT: Berichten verdwijnen bij navigeren tussen Chat ↔ Geschiedenis ↔ Acties
+- [x] Fix: Conversatie moet stabiel blijven tot gebruiker op "Nieuw Gesprek" klikt
+- [x] Test: 5 berichten met 10 sec wachttijd + navigatie tussen menu's
+- [x] saveMessage API gewijzigd naar conversationId ipv themeId voor stabiele persistentie
+- [x] Automatic theme switching tijdens gesprekken uitgeschakeld (voorkomt conversatie-wisseling)
+- [x] Conversation initialization tracking toegevoegd (voorkomt onnodige reloads)

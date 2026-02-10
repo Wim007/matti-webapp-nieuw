@@ -23,15 +23,34 @@ export default function Chat() {
     { enabled: !!user, refetchOnMount: true }
   );
 
-  // Refetch conversation when theme changes
+  // Track previous theme to detect intentional theme changes
+  const [previousThemeId, setPreviousThemeId] = useState<ThemeId>(currentThemeId);
+
+  // Refetch conversation ONLY when theme changes intentionally (not from detection)
   useEffect(() => {
-    if (user) {
-      refetchConversation();
+    if (user && currentThemeId !== previousThemeId) {
+      // Only refetch if this is a manual theme change (via Themes page or navigation)
+      // NOT from automatic theme detection during conversation
+      const isManualThemeChange = !conversation || conversation.themeId !== currentThemeId;
+      
+      if (isManualThemeChange) {
+        setPreviousThemeId(currentThemeId);
+        refetchConversation();
+        setInitializedConversationId(null); // Reset to load new conversation
+      }
     }
-  }, [currentThemeId, user, refetchConversation]);
+  }, [currentThemeId, user, refetchConversation, previousThemeId, conversation]);
+
+  // Track if we've initialized messages for this conversation
+  const [initializedConversationId, setInitializedConversationId] = useState<number | null>(null);
 
   // Load messages from conversation
   useEffect(() => {
+    // Only update messages if conversation ID changed or this is first load
+    if (!conversation || conversation.id === initializedConversationId) {
+      return;
+    }
+
     if (conversation?.messages && Array.isArray(conversation.messages) && conversation.messages.length > 0) {
       const loadedMessages: ChatMessage[] = (conversation.messages as Array<{
         role: "user" | "assistant";
@@ -44,8 +63,9 @@ export default function Chat() {
         timestamp: msg.timestamp,
       }));
       setMessages(loadedMessages);
-    } else if (user) {
-      // Show welcome message if no conversation exists
+      setInitializedConversationId(conversation.id);
+    } else if (user && messages.length === 0) {
+      // Show welcome message ONLY if no messages exist yet (first time)
       // Get name and age from localStorage profile (onboarding)
       const profileData = localStorage.getItem("matti_user_profile");
       let userName = "daar";
@@ -67,8 +87,9 @@ export default function Chat() {
         timestamp: new Date().toISOString(),
       };
       setMessages([welcomeMsg]);
+      setInitializedConversationId(conversation.id);
     }
-  }, [conversation, user]);
+  }, [conversation, user, initializedConversationId, messages.length]);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -132,8 +153,11 @@ export default function Chat() {
 
     try {
       // Save user message to database
+      if (!conversation) {
+        throw new Error("No active conversation");
+      }
       await saveMessage.mutateAsync({
-        themeId: currentThemeId,
+        conversationId: conversation.id,
         role: "user",
         content: messageText,
       });
@@ -175,25 +199,30 @@ export default function Chat() {
       });
 
       // Save assistant response
+      if (!conversation) {
+        throw new Error("No active conversation");
+      }
       await saveMessage.mutateAsync({
-        themeId: currentThemeId,
+        conversationId: conversation.id,
         role: "assistant",
         content: response.reply,
-        threadId: conversation?.threadId || undefined,
+        threadId: conversation.threadId || undefined,
       });
       
-      // Update theme if detected theme is different and not "general"
+      // DISABLED: Automatic theme switching during conversations causes message loss
+      // Theme detection is now only used for intervention tracking, not for switching conversations
+      // Users can manually switch themes via "Nieuw Gesprek" button
+      /*
       if (response.detectedTheme && response.detectedTheme !== "general" && response.detectedTheme !== currentThemeId) {
-        console.log(`[ThemeDetection] Updating theme from ${currentThemeId} to ${response.detectedTheme}`);
-        setCurrentThemeId(response.detectedTheme);
-        // Show toast notification
+        console.log(`[ThemeDetection] Detected theme ${response.detectedTheme}, but keeping current conversation stable`);
         const newTheme = THEMES.find(t => t.id === response.detectedTheme);
         if (newTheme) {
-          toast.info(`${newTheme.emoji} Thema gewijzigd naar "${newTheme.name}"`, {
-            description: "Matti heeft het gespreksonderwerp herkend",
+          toast.info(`${newTheme.emoji} Onderwerp gedetecteerd: "${newTheme.name}"`, {
+            description: "Gesprek blijft in huidig thema",
           });
         }
       }
+      */
       
       // Track RISK_DETECTED if risk was found in response
       if (response.riskDetected && response.riskLevel && response.riskType && conversation) {
@@ -348,6 +377,9 @@ export default function Chat() {
       
       // Reset session tracking for new conversation
       setSessionStartTracked(false);
+      
+      // Reset conversation initialization tracker
+      setInitializedConversationId(null);
       
       // Refetch to create new empty conversation
       await refetchConversation();
