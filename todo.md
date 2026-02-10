@@ -358,8 +358,9 @@
 - [ ] OPLOSSING NODIG: Overweeg post-processing of alternatieve detectie methode
 
 ## Visual Editor Wijzigingen Chat Pagina
-- [x] Achtergrondkleur aangepast via visual editor
+- [x] Achtergrondkleur aangepast via visual editor (outer div)
 - [x] Display mode en border styling aangepast
+- [x] Tekst achtergrondkleur aangepast (crème en lichtgroen)
 
 ## KRITIEKE BUG - Thread Persistentie (OPGELOST)
 - [x] URGENT: Chat reset automatisch na 5-10 seconden (alle berichten verdwijnen)
