@@ -136,6 +136,43 @@ export default function Chat() {
     }
   }, [conversation, sessionStartTracked, user, currentThemeId]);
 
+  // Automatic action detection on new assistant messages
+  useEffect(() => {
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage) return;
+    if (lastMessage.isAI === false) return; // Only check assistant messages
+    if ((lastMessage as any)._actionChecked) return; // Already checked
+    if (!conversation) return; // Need conversation ID
+
+    const result = detectActionIntelligent(lastMessage.content);
+    if (result) {
+      console.log('[ActionDetection] Action detected:', result.actionText);
+      
+      saveAction.mutate({
+        actionText: result.actionText,
+        themeId: currentThemeId,
+        conversationId: conversation.id,
+      }, {
+        onSuccess: () => {
+          console.log('[ActionDetection] Action saved successfully');
+          toast.success('💪 Actie opgeslagen!', {
+            description: result.actionText,
+            action: {
+              label: 'Bekijk',
+              onClick: () => window.location.href = '/actions',
+            },
+          });
+        },
+        onError: (error) => {
+          console.error('[ActionDetection] Failed to save action:', error);
+        },
+      });
+    }
+    
+    // Mark as checked to prevent duplicate detection
+    (lastMessage as any)._actionChecked = true;
+  }, [messages, conversation, currentThemeId, saveAction]);
+
   const handleSendMessage = async () => {
     if (!inputText.trim() || !user) return;
 

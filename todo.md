@@ -387,3 +387,12 @@
 - [x] saveMessage API gewijzigd naar conversationId ipv themeId voor stabiele persistentie
 - [x] Automatic theme switching tijdens gesprekken uitgeschakeld (voorkomt conversatie-wisseling)
 - [x] Conversation initialization tracking toegevoegd (voorkomt onnodige reloads)
+
+## KRITIEKE FIX - Action Detection useEffect
+- [x] Voeg useEffect toe in Chat.tsx die triggert op nieuwe assistant messages
+- [x] Detecteer acties automatisch met detectActionIntelligent()
+- [x] Roep saveAction mutation aan wanneer actie gedetecteerd
+- [x] Toon toast notificatie bij opgeslagen actie
+- [x] Voorkom dubbele detectie met _actionChecked flag
+- [ ] PROBLEEM: useEffect triggert NIET (geen console logs, geen acties opgeslagen)
+- [ ] DEBUG: Check of messages array correct update triggert
