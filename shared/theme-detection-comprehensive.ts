@@ -22,12 +22,21 @@ export interface ThemeDetectionResult {
 const THEME_KEYWORDS = {
   school: {
     keywords: [
-      // Academic performance
-      "faalangst", "tentamen", "toets", "cijfer", "zakken", "herkansing",
-      "huiswerk", "studie", "leren", "concentratie", "aandacht",
+      // Academic performance (HIGH WEIGHT)
+      { word: "tentamen", weight: 2.0 },
+      { word: "tentamens", weight: 2.0 },
+      { word: "toets", weight: 2.0 },
+      { word: "toetsen", weight: 2.0 },
+      { word: "examen", weight: 2.0 },
+      { word: "examens", weight: 2.0 },
+      { word: "leren", weight: 2.0 },
+      { word: "studeren", weight: 2.0 },
+      // Academic performance (NORMAL WEIGHT)
+      "faalangst", "cijfer", "zakken", "herkansing",
+      "huiswerk", "studie", "concentratie", "aandacht",
       // School environment
       "school", "klas", "docent", "leraar", "rapport", "studiestress",
-      "examens", "deadline", "presentatie", "groepswerk",
+      "deadline", "presentatie", "groepswerk",
       // Stress indicators
       "te veel", "lukt niet", "snap het niet", "kan het niet",
       "te moeilijk", "stress", "druk", "overweldigd",
@@ -191,9 +200,17 @@ export function detectTheme(message: string): ThemeDetectionResult {
   // Calculate scores for each theme
   for (const [theme, config] of Object.entries(THEME_KEYWORDS)) {
     for (const keyword of config.keywords) {
-      if (lowerMessage.includes(keyword)) {
-        scores[theme as ThemeId] += config.weight;
-        matchedKeywords.push(keyword);
+      if (typeof keyword === 'string') {
+        if (lowerMessage.includes(keyword)) {
+          scores[theme as ThemeId] += config.weight;
+          matchedKeywords.push(keyword);
+        }
+      } else {
+        // Weighted keyword object
+        if (lowerMessage.includes(keyword.word)) {
+          scores[theme as ThemeId] += config.weight * keyword.weight;
+          matchedKeywords.push(keyword.word);
+        }
       }
     }
   }

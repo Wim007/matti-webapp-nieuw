@@ -3,12 +3,14 @@ import type { UserProfile } from "@shared/matti-types";
 
 export default function Profile() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const stored = localStorage.getItem("matti_user_profile");
     if (stored) {
       setProfile(JSON.parse(stored));
     }
+    setIsLoading(false);
   }, []);
 
   const handleLogout = () => {
@@ -17,6 +19,14 @@ export default function Profile() {
       window.location.href = "/";
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen flex flex-col">

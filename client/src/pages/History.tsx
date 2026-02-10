@@ -50,22 +50,8 @@ export default function History() {
 
   if (isLoading) {
     return (
-      <div className="h-screen flex flex-col">
-        {/* Header */}
-        <div className="px-6 py-4" style={{background: 'linear-gradient(90deg, #c7b8ff 0%, #aaf2f3 100%)'}}>
-          <h1 className="text-2xl font-bold text-white">Geschiedenis</h1>
-        </div>
-
-        {/* Loading State */}
-        <div className="flex-1 flex items-center justify-center" style={{backgroundColor: '#f5f9ff'}}>
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Geschiedenis laden...</p>
-          </div>
-        </div>
-
-        {/* Bottom Tab Navigation */}
-        <TabNavigation currentTab="history" />
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full"></div>
       </div>
     );
   }
