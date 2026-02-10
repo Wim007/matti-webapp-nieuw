@@ -357,6 +357,10 @@
 - [ ] PROBLEEM: Matti gebruikt nog steeds NIET het [ACTION: ...] format in responses
 - [ ] OPLOSSING NODIG: Overweeg post-processing of alternatieve detectie methode
 
+## Visual Editor Wijzigingen Chat Pagina
+- [x] Achtergrondkleur aangepast via visual editor
+- [x] Display mode en border styling aangepast
+
 ## KRITIEKE BUG - Thread Persistentie (OPGELOST)
 - [x] URGENT: Chat reset automatisch na 5-10 seconden (alle berichten verdwijnen)
 - [x] URGENT: Thread springt terug naar nieuw openingsbericht zonder gebruikersactie
