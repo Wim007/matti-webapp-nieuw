@@ -69,9 +69,10 @@ const THEME_PATTERNS: ThemeKeywords[] = [
   {
     theme: "love",
     keywords: [
-      "verliefd", "liefde", "crush", "date", "relatie", "verkering", "vriendje",
+      "verliefd", "liefde", "crush", "date", "relatie", "verkering", "vriendje", "grappig", "lief", "leuk", "leuke jongen", "leuk meisje", "hij is", "zij is",
       "vriendinnetje", "zoenen", "kussen", "seks", "eerste keer", "afgewezen",
       "uit elkaar", "gebroken hart", "jaloers", "jaloezie", "tinder", "daten"
+          weight: 3, // Verhoogd voor betere detectie verliefdheid
     ],
     weight: 2,
   },
