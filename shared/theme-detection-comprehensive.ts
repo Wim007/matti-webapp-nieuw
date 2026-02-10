@@ -41,7 +41,7 @@ const THEME_KEYWORDS = {
       "te veel", "lukt niet", "snap het niet", "kan het niet",
       "te moeilijk", "stress", "druk", "overweldigd",
     ],
-    weight: 1.6,
+    weight: 1.7,
   },
   friends: {
     keywords: [
@@ -89,7 +89,7 @@ const THEME_KEYWORDS = {
       // Self-harm indicators
       "pijn doen", "zelfbeschadiging", "snijden", "niet meer willen leven",
     ],
-    weight: 1.7, // Highest weight - emotional safety priority
+    weight: 1.5, // General emotional issues (crisis detection via severity level)
   },
   love: {
     keywords: [
