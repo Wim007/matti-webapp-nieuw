@@ -396,3 +396,15 @@
 - [x] Voorkom dubbele detectie met _actionChecked flag
 - [ ] PROBLEEM: useEffect triggert NIET (geen console logs, geen acties opgeslagen)
 - [ ] DEBUG: Check of messages array correct update triggert
+
+## CLEANUP - Actie-detectie Afronden (FOCUS & AFRONDING)
+- [x] Verwijder useEffect action detection (dubbele logica, triggert niet betrouwbaar)
+- [x] Zorg voor ENKELE detectie-path: direct na AI response in handleSendMessage
+- [x] Verifieer dat detectActionIntelligent() correct wordt aangeroepen
+- [ ] PROBLEEM: Acties worden NIET opgeslagen (geen console logs, geen toast, geen acties in database)
+- [ ] DIAGNOSE NODIG: Check waarom saveAction.mutateAsync niet wordt aangeroepen
+- [x] Verwijder alle impliciete of conflicterende detectielogica
+- [x] Architectuur voorbereiden op dashboard-rapportage (ZONDER outcome-logica te bouwen)
+- [x] VERBODEN: Geen sentiment-based outcome detectie
+- [x] VERBODEN: Geen automatische "opgelost" conclusies
+- [x] VERBODEN: Geen nieuwe features of refactors
