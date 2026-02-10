@@ -73,6 +73,11 @@ export function detectActionIntelligent(aiResponse: string): DetectedAction | nu
     /maak\s+([^.!?]+?)(?:\.|!|\?|$)/i,
     /zoek\s+([^.!?]+?)(?:\.|!|\?|$)/i,
     
+    // Infinitief patterns ("door te bellen naar", "om te praten met")
+    /(?:door|om)\s+te\s+(?:bellen|praten|spreken)\s+(?:naar|met)\s+([^.!?]+?)(?:\.|!|\?|$)/i,
+    /(?:door|om)\s+(?:contact op te nemen met|te bellen naar)\s+([^.!?]+?)(?:\.|!|\?|$)/i,
+    /bereiken\s+door\s+te\s+bellen\s+naar\s+([^.!?]+?)(?:\.|!|\?|$)/i,
+    
     // Indirect patterns (suggestions)
     /(?:kun je|kan je|zou je kunnen)\s+(?:ook\s+)?(?:contact opnemen met|bellen met|praten met)\s+([^.!?]+?)(?:\.|!|\?|$)/i,
     /(?:het kan helpen om|probeer eens om|misschien kun je)\s+([^.!?]+?)(?:\.|!|\?|$)/i,

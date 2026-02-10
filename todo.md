@@ -368,6 +368,16 @@
 - [x] Voeg typing indicator animatie toe ("Matti is aan het typen..." met animated dots)
 - [x] Uitgebreide patronen toegevoegd voor indirecte adviezen ("kun je contact opnemen met...", "het kan helpen om...")
 
+## Nieuwe Features - Actie Detectie & Rewards
+- [ ] Test live actie-detectie met verbeterde patronen in bestaand pestgesprek
+- [ ] Verifieer dat "kun je contact opnemen met De Kindertelefoon" wordt gedetecteerd
+- [ ] Implementeer actie-bevestiging toast notificatie ("✅ Actie opgeslagen: [actietekst]")
+- [ ] Design reward systeem: 5 punten per voltooide actie
+- [ ] Implementeer badges: eerste badge na 3 voltooide acties
+- [ ] Voeg punten/badges toe aan user schema in database
+- [ ] Update Profiel pagina met punten en badges display
+- [ ] Test reward flow: actie voltooien → punten krijgen → badge unlocken
+
 ## KRITIEKE BUG - Thread Persistentie (OPGELOST)
 - [x] URGENT: Chat reset automatisch na 5-10 seconden (alle berichten verdwijnen)
 - [x] URGENT: Thread springt terug naar nieuw openingsbericht zonder gebruikersactie
